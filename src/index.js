@@ -9,7 +9,7 @@ import {
 
 const Root = () => {
   return (
-    <div className="container">
+    <div className="uk-container">
       <Router history={BrowserHistory}>
         <Route path="/" component={PopularMovies}/>
       </Router>

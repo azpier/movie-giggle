@@ -25,43 +25,29 @@ class PopularMovies extends Component {
   render() {
 
     const {movies} = this.state;
-
     return (
       <div>
         <Nav/>
-        <h3 className="text-center">Popular Movies</h3>
-        <hr/> {Object.keys(movies).map((movie, index) => (
-          <div className="col-sm-6" key={index}>
-            <div className="panel panel-primary">
-              <div className="panel-heading">
-                <h3 className="panel-title">
-                  <span className="btn">#{movie.results}</span>
-                </h3>
-              </div>
-              <div className="panel-body">
-                <p>
-                  {movie.overview}
-                </p>
-              </div>
+        <div className="uk-container">
+          <h3 className="uk-text-center">Popular Movies</h3>
+            <hr/>
+            <div className="uk-grid uk-grid-match uk-child-width-1-5@m">
+              {movies.map((movie, index) => (
+                <div key={index}>
+                  <div className="uk-card uk-card-default uk-card-hover uk-text-center">
+                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main-images"/>
+                    </div>
+                  </div>
+              ))}
             </div>
-          </div>
-        ))}
 
-        <div className="col-sm-12">
-          <div className="jumbotron text-center">
             <h2>Get Access to popular movies By Logging In</h2>
-          </div>
-        </div>
-
-        <div className="col-sm-12">
-          <div className="jumbotron text-center">
             <h2>View popular movies</h2>
-            <Link className="btn btn-lg btn-success" to='/'>
+            <Link className="uk-button" to='/'>
               Popular movies
             </Link>
           </div>
         </div>
-      </div>
     );
   }
 }
