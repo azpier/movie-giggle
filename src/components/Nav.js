@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { login, logout, isLoggedIn } from '../utils/AuthService';
 import '../App.css';
+import { withRouter } from 'react-router-dom';
+
+
+const AuthButton = withRouter(({ history }) => (
+   (isLoggedIn()) ? ( <button onClick={() => logout(history.push('/'))}>Log out </button> ) : ( <button onClick={() => login()}>Log In</button> )
+))
 
 class Nav extends Component {
 
   render() {
     return (
       <nav className="uk-nav">
-        <div className="uk-nav">
-          <Link className="navbar-brand" to="/">Popular Movies</Link>
-        </div>
         <ul className="uk-nav">
-          <li><button className="btn btn-info log">Log In</button></li>
-          <li><button className="btn btn-danger log">Log out </button></li>
+          <li>
+            <AuthButton />
+          </li>
         </ul>
       </nav>
     );

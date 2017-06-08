@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "auth0-js": "^8.7.0",
     "axios": "^0.16.2",
+    "jwt-decode": "^2.2.0",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-history": "^0.18.2",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1"
   },
