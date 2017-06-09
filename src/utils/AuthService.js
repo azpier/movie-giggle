@@ -29,12 +29,6 @@ export function logout() {
   clearAccessToken();
 }
 
-export function requireAuth(nextState, replace) {
-  if (!isLoggedIn()) {
-    replace({pathname: '/'});
-  }
-}
-
 export function getIdToken() {
   return localStorage.getItem(ID_TOKEN_KEY);
 }
