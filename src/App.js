@@ -22,7 +22,7 @@ class App extends Component {
         <div className="uk-navbar-right">
           <button className="uk-button uk-button-default" onClick={this.goTo.bind(this, 'movies')}>Home</button>
           <button className="uk-button uk-button-default" onClick={this.goTo.bind(this, 'profile')}>Profile</button>
-          <button className="uk-button uk-button-default" onClick={this.goTo.bind(this, 'movies')}>Watched List</button>
+          <button className="uk-button uk-button-default" onClick={this.goTo.bind(this, 'watchedlist')}>Watched List</button>
           {
             !isAuthenticated() && (
               <button className="uk-button uk-button-primary" onClick={this.login.bind(this)}>Log In</button>

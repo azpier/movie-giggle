@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {getMovieData} from '../Utils/movie-api.js';
-import '../App.css';
 
-class PopularMovies extends Component {
+class WatchedMovies extends Component {
 
   constructor() {
     super()
@@ -35,11 +34,11 @@ class PopularMovies extends Component {
             {movies.map((movie, index) => (
               <div key={index} className="uk-padding">
                 <div className="uk-card uk-card-default uk-card-hover uk-text-center">
-                  <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main-images" className="posterImg"/>
+                  <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main-images" />
                 </div>
                 <div className="uk-text-center">
                   {
-                    isAuthenticated() ? (<div><button className="addToWatchedBtn">Add to Watchlist</button></div>) : ''
+                    isAuthenticated() ? (<div><button className="removeFromWatchedBtn">Remove</button></div>) : ''
                   }
                 </div>
               </div>
@@ -51,4 +50,4 @@ class PopularMovies extends Component {
   }
 }
 
-export default PopularMovies;
+export default WatchedMovies;
