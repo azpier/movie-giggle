@@ -1,28 +1,58 @@
-import React, {Component} from 'react';
-import {getMovieData} from '../Utils/movie-api.js';
+import React, { Component } from 'react';
+import axios from 'axios';
 
 class WatchedMovies extends Component {
 
   constructor() {
     super()
     this.state = {
-      movies: []
+      movies: [],
+      profile: {}
     };
   }
 
-  getPopularMovies() {
-    getMovieData().then((movies) => {
+  getWatchedData() {
+    const { profile } = this.state
+    return axios.get('http://localhost:8080/api/userwatched', {
+      params: {
+        userid: profile.sub
+      }
+    }).then(response => response.data)
+    .then((movies) => {
       this.setState({movies});
     });
   }
 
-  componentDidMount() {
-    this.getPopularMovies();
+  getWatchedMovies() {
+    
+    return axios.get('http://localhost:8080/api/userwatched')
+    .then((movies) => {
+      this.setState({movies});
+    });
+  }
+
+
+  getLoggedUser() {
+    this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile });
+        this.getWatchedData();
+      });
+    } else {
+      this.setState({ profile: userProfile });
+      this.getWatchedData();
+    }
+  }
+
+  componentWillMount() {
+    this.getLoggedUser();
   }
 
   render() {
 
-    const {movies} = this.state;
+    const { movies } = this.state;
     const { isAuthenticated } = this.props.auth;
 
     return (

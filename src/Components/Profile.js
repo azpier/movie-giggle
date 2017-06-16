@@ -18,11 +18,11 @@ class Profile extends Component {
       <div className="uk-section ">
         <div className="uk-container">
           <h1>{profile.name}</h1>
-            <img src={profile.picture} alt="profile" />
-            <div>
-              <h3>{profile.nickname}</h3>
-            </div>
-            <pre>{JSON.stringify(profile, null, 2)}</pre>
+          <img src={profile.picture} alt="profile" />
+          <div>
+            <h3>{profile.nickname}</h3>
+          </div>
+          <pre>{JSON.stringify(profile, null, 2)}</pre>
 
         </div>
       </div>
