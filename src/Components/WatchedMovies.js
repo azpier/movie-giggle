@@ -13,24 +13,18 @@ class WatchedMovies extends Component {
 
   getWatchedData() {
     const { profile } = this.state
+
+    const userID = profile.sub;
+
     return axios.get('http://localhost:8080/api/userwatched', {
       params: {
-        userid: profile.sub
+        userID: userID
       }
     }).then(response => response.data)
     .then((movies) => {
       this.setState({movies});
     });
   }
-
-  getWatchedMovies() {
-    
-    return axios.get('http://localhost:8080/api/userwatched')
-    .then((movies) => {
-      this.setState({movies});
-    });
-  }
-
 
   getLoggedUser() {
     this.setState({ profile: {} });
@@ -51,7 +45,6 @@ class WatchedMovies extends Component {
   }
 
   render() {
-
     const { movies } = this.state;
     const { isAuthenticated } = this.props.auth;
 
@@ -64,7 +57,7 @@ class WatchedMovies extends Component {
             {movies.map((movie, index) => (
               <div key={index} className="uk-padding">
                 <div className="uk-card uk-card-default uk-card-hover uk-text-center">
-                  <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main-images" />
+                  <h2>{movie.movieID}</h2>
                 </div>
                 <div className="uk-text-center">
                   {

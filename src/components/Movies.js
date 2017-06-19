@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
 import {getMovieData} from '../Utils/movie-api.js';
 import '../App.css';
+import axios from 'axios';
 
 class PopularMovies extends Component {
 
   constructor() {
     super()
     this.state = {
-      movies: []
+      movies: [],
+      profile: {}
     };
+    this.saveWatchedMovies = this.saveWatchedMovies.bind(this);
   }
 
   getPopularMovies() {
@@ -17,8 +20,40 @@ class PopularMovies extends Component {
     });
   }
 
+  getLoggedUser() {
+    this.setState({ profile: {} });
+    const { userProfile, getProfile } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile });
+      });
+    } else {
+      this.setState({ profile: userProfile });
+    }
+  }
+
+  saveWatchedMovies(index, event){
+
+    const { profile } = this.state;
+    const { movies } = this.state;
+    
+    let selectedMovie = movies[index].id;
+
+    axios.post('http://localhost:8080/api/userwatched', {
+    userID: profile.sub,
+    movieID: selectedMovie
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+  }
+
   componentDidMount() {
     this.getPopularMovies();
+    this.getLoggedUser();
   }
 
   render() {
@@ -39,7 +74,7 @@ class PopularMovies extends Component {
                 </div>
                 <div className="uk-text-center">
                   {
-                    isAuthenticated() ? (<div><button className="addToWatchedBtn">Add to Watchlist</button></div>) : ''
+                    isAuthenticated() ? (<div><button onClick={this.saveWatchedMovies.bind(this, index)} className="addToWatchedBtn">Add to Watchlist</button></div>) : ''
                   }
                 </div>
               </div>
