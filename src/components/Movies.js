@@ -37,7 +37,7 @@ class PopularMovies extends Component {
     const { profile } = this.state;
     const { movies } = this.state;
     
-    let selectedMovie = movies[index].id;
+    const selectedMovie = movies[index].id;
 
     axios.post('http://localhost:8080/api/userwatched', {
     userID: profile.sub,
@@ -57,14 +57,14 @@ class PopularMovies extends Component {
   }
 
   render() {
-
+    const { profile } = this.state;
     const {movies} = this.state;
     const { isAuthenticated } = this.props.auth;
 
     return (
       <div>
         <div className="uk-container uk-section">
-          <h3 className="uk-text-center">Popular Movies</h3>
+          <h3 className="uk-text-center">Logged User {profile.name}</h3>
           <hr />
           <div className="uk-grid uk-grid-match uk-child-width-1-5@m">
             {movies.map((movie, index) => (

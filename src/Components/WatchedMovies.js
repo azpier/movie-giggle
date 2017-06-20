@@ -6,24 +6,10 @@ class WatchedMovies extends Component {
   constructor() {
     super()
     this.state = {
-      movies: [],
+      watched: [],
       profile: {}
     };
-  }
-
-  getWatchedData() {
-    const { profile } = this.state
-
-    const userID = profile.sub;
-
-    return axios.get('http://localhost:8080/api/userwatched', {
-      params: {
-        userID: userID
-      }
-    }).then(response => response.data)
-    .then((movies) => {
-      this.setState({movies});
-    });
+    this.deleteWatchedMovie = this.deleteWatchedMovie.bind(this);
   }
 
   getLoggedUser() {
@@ -40,29 +26,64 @@ class WatchedMovies extends Component {
     }
   }
 
-  componentWillMount() {
-    this.getLoggedUser();
+  getWatchedData() {
+    
+    const { profile } = this.state;
+
+    const userID = profile.sub;
+
+    return axios.get('http://localhost:8080/api/userwatched/:', {
+      params: {
+        userID: userID
+      }
+    })
+    .then(response => response.data)
+    .then((watched) => {
+      this.setState({watched});
+    });
   }
 
+  deleteWatchedMovie(index, event){
+
+    const { watched } = this.state;
+    const selectedMovie = watched[index].movieID;
+
+    axios.delete('http://localhost:8080/api/userwatched/:', {
+    movieID: selectedMovie
+  })
+  .then(response =>{this.getWatchedData()})
+  .catch(function (error) {
+    console.log(error);
+  });
+
+}
+
+  componentWillMount() {
+    this.getLoggedUser()
+  }
+
+  componentDidMount(){
+    this.getLoggedUser()
+  }
+
+
   render() {
-    const { movies } = this.state;
-    const { isAuthenticated } = this.props.auth;
+    const { watched } = this.state;
+    const { profile } = this.state
 
     return (
       <div>
         <div className="uk-container uk-section">
-          <h3 className="uk-text-center">Popular Movies</h3>
+          <h3 className="uk-text-center">Logged User {profile.name}</h3>
           <hr />
           <div className="uk-grid uk-grid-match uk-child-width-1-5@m">
-            {movies.map((movie, index) => (
+            {watched.map((movie, index) => (
               <div key={index} className="uk-padding">
                 <div className="uk-card uk-card-default uk-card-hover uk-text-center">
                   <h2>{movie.movieID}</h2>
                 </div>
                 <div className="uk-text-center">
-                  {
-                    isAuthenticated() ? (<div><button className="removeFromWatchedBtn">Remove</button></div>) : ''
-                  }
+                 <button onClick={this.deleteWatchedMovie.bind(this, index)}className="removeFromWatchedBtn">Remove</button>
                 </div>
               </div>
             ))}
