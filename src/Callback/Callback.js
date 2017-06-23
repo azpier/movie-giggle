@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import loading from './loading.svg';
 
-class Callback extends Component {
+class Callback extends Component { 
+
   render() {
+
     const style = {
       position: 'absolute',
       display: 'flex',

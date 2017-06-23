@@ -32,9 +32,9 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        history.replace('/movies');
+        history.replace('/');
       } else if (err) {
-        history.replace('/movies');
+        history.replace('/');
         console.log(err);
         alert(`Error: ${err.error}. Check the console for further details.`);
       }
@@ -42,6 +42,7 @@ export default class Auth {
   }
 
   setSession(authResult) {
+    
     // Set the time that the access token will expire at
     let expiresAt = JSON.stringify(
       authResult.expiresIn * 1000 + new Date().getTime()
@@ -49,8 +50,10 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+  
     // navigate to the home route
-    history.replace('/movies');
+    history.replace('/');
+
   }
 
   getAccessToken() {
@@ -61,13 +64,13 @@ export default class Auth {
     return accessToken;
   }
 
-  getProfile(cb) {
+getProfile() {
     let accessToken = this.getAccessToken();
     this.auth0.client.userInfo(accessToken, (err, profile) => {
       if (profile) {
         this.userProfile = profile;
+        localStorage.setItem('user_profile', JSON.stringify(profile));
       }
-      cb(err, profile);
     });
   }
 
@@ -76,6 +79,7 @@ export default class Auth {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('user_profile');
     this.userProfile = null;
     // navigate to the movies route
     history.replace('/movies');

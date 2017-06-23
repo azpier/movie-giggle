@@ -18,31 +18,33 @@ const handleAuthentication = (nextState, replace) => {
 }
 
 export const makeMainRoutes = () => {
+
   return (
-      <BrowserRouter history={history} component={App}>
-        <div>
-          <Route path="/" render={(props) => <App auth={auth} {...props} />} />
-          <Route path="/login" render={(props) => <LoginPage auth={auth} {...props} />} />
-          <Route path="/movies" render={(props) => <Movies auth={auth} {...props} />} />
-          <Route path="/profile" render={(props) => (
-            !auth.isAuthenticated() ? (
-              <Redirect to="/login"/>
-            ) : (
+    <BrowserRouter history={history} component={App}>
+      <div>
+        <Route path="/" render={(props) => <App auth={auth} {...props} />} />
+        <Route path="/login" render={(props) => <LoginPage auth={auth} {...props} />} />
+        <Route path="/movies" render={(props) => <Movies auth={auth} {...props} />} />
+        <Route path="/profile" render={(props) => (
+          !auth.isAuthenticated() ? (
+            <Redirect to="/login" />
+          ) : (
               <Profile auth={auth} {...props} />
             )
-          )} />
-          <Route path="/watchedlist" render={(props) => (
-            !auth.isAuthenticated() ? (
-              <Redirect to="/login"/>
-            ) : (
+        )} />
+        <Route path="/watchedlist" render={(props) => (
+          !auth.isAuthenticated() ? (
+            <Redirect to="/login" />
+          ) : (
               <WatchedMovies auth={auth} {...props} />
             )
-          )} />
-          <Route path="/callback" render={(props) => {
-            handleAuthentication(props);
-            return <Callback {...props} /> 
-          }}/>
-        </div>
-      </BrowserRouter>
+        )} />
+        <Route path="/callback" render={(props) => {
+          handleAuthentication(props);
+          return <Callback {...props} />
+
+        }} />
+      </div>
+    </BrowserRouter>
   );
 }

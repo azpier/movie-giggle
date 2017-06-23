@@ -14,6 +14,26 @@ class App extends Component {
     this.props.auth.logout();
   }
 
+  getUserProfile() {
+
+    const { isAuthenticated } = this.props.auth;
+    const { userProfile, getProfile } = this.props.auth;
+
+    if (isAuthenticated()) {
+      if (!userProfile) {
+        getProfile((err, profile) => {
+          localStorage.setItem('user_profile', JSON.stringify(profile));
+        });
+      } else {
+        localStorage.setItem('user_profile', JSON.stringify(userProfile));
+      }
+    }
+  }
+
+  componentWillMount() {
+    this.getUserProfile();
+  }
+
   render() {
     const { isAuthenticated } = this.props.auth;
 
