@@ -7,11 +7,9 @@ class WatchedMovies extends Component {
     super(props)
 
     this.state = {
-      userWatched: [],
-      alerts: {}
+      userWatched: []
     };
     this.getWatchedData();
-    this.deleteWatchedMovie = this.deleteWatchedMovie.bind(this);
   }
 
   //Gets user selection from DB for API query
@@ -23,10 +21,10 @@ class WatchedMovies extends Component {
     userProfile = JSON.parse(userProfile);
 
     return axios.get('http://localhost:8080/api/userwatched/:', {
-      params: {
-        userID: userProfile.sub
-      }
-    })
+        params: {
+          userID: userProfile.sub
+        }
+      })
       .then((response) => {
         response.data.forEach((watchedMovies) => {
           const searchID = watchedMovies.movieID;
@@ -35,30 +33,45 @@ class WatchedMovies extends Component {
           return axios.get(url)
             .then((response) => {
               arrayWatchedList.push(response.data);
-              this.setState({ userWatched: arrayWatchedList });
+              this.setState({
+                userWatched: arrayWatchedList
+              });
             })
         });
       })
-
   }
 
-  deleteWatchedMovie(index, event) {
+  refreshData() {
 
-    const { userWatched } = this.state;
-    const selectedMovie = userWatched[index].id;
+    let arrayWatchedList = [];
 
     let userProfile = localStorage.getItem('user_profile');
     userProfile = JSON.parse(userProfile);
 
-    const userID = userProfile.sub;
-
-    axios.delete('http://localhost:8080/api/userwatched', {
-      params: {
-        movieID: selectedMovie,
-        userID: userID
-      }
-    })
-      .then(res => res.data.message);
+    return axios.get('http://localhost:8080/api/userwatched/:', {
+        params: {
+          userID: userProfile.sub
+        }
+      })
+      .then((response) => {
+        if(response.data.length !== 0){
+        response.data.forEach((watchedMovies) => {
+          const searchID = watchedMovies.movieID;
+          const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
+          //call tmdb api here!!!
+          return axios.get(url)
+            .then((response) => {
+              arrayWatchedList.push(response.data);
+              this.setState({
+                userWatched: arrayWatchedList
+              });
+            })
+        });
+        } else {
+          //add stuff here to re render component
+          this.setState({userWatched: ""})
+        }
+      })
   }
 
   render() {
@@ -86,7 +99,7 @@ class WatchedMovies extends Component {
                     <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main-images" className="posterImg" />
                   </div>
                   <div className="uk-text-center">
-                    <button onClick={this.deleteWatchedMovie.bind(this, index)} className="removeFromWatchedBtn">Remove</button>
+                   <DeleteButton watchedList={this.state.userWatched} index={index} getContent={this.refreshData.bind(this)}/>
                   </div>
                 </div>
               ))}
@@ -99,3 +112,36 @@ class WatchedMovies extends Component {
 }
 
 export default WatchedMovies;
+
+//delete button component
+class DeleteButton extends Component {
+  
+  Constructor (){
+    this.deleteWatchedMovie= this.deleteWatchedMovie.bind(this)
+  }
+
+  deleteWatchedMovie(event) {
+    
+    const userWatched = this.props.watchedList;
+    const index = this.props.index;
+
+    const selectedMovie = userWatched[index].id;
+
+    let userProfile = localStorage.getItem('user_profile');
+    userProfile = JSON.parse(userProfile);
+
+    const userID = userProfile.sub;
+
+    axios.delete('http://localhost:8080/api/userwatched', {
+        params: {
+          movieID: selectedMovie,
+          userID: userID
+        }
+      }).then(()=> this.props.getContent())
+  }
+  render() {
+      return(
+         <button onClick={ this.deleteWatchedMovie.bind(this) } className="removeFromWatchedBtn">Remove</button>
+      );
+  }
+}
