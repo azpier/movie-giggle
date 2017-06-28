@@ -11,6 +11,7 @@ class PopularMovies extends Component {
       movies: [],
       watched: []
     };
+    this.getWatchedData();
     this.saveWatchedMovies = this.saveWatchedMovies.bind(this);
 
   }
@@ -22,25 +23,32 @@ class PopularMovies extends Component {
   }
 
   getWatchedData() {
-
     const { isAuthenticated } = this.props.auth;
+    let arrayWatchedList = [];
 
     if (isAuthenticated()) {
-
       let userProfile = localStorage.getItem('user_profile');
       userProfile = JSON.parse(userProfile);
-
-      if (userProfile != null) {
-        return axios.get('http://localhost:8080/api/userwatched/:', {
-          params: {
-            userID: userProfile.sub
-          }
+      return axios.get('http://localhost:8080/api/userwatched/:', {
+        params: {
+          userID: userProfile.sub
+        }
+      })
+        .then((response) => {
+          response.data.map((watchedMovies) => {
+            const searchID = watchedMovies.movieID;
+            const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
+            //call tmdb api here!!!
+            return axios.get(url)
+              .then((response) => {
+                response.data.addedOrder = watchedMovies.addedOrder;
+                arrayWatchedList.push(response.data);
+                this.setState({ watched: arrayWatchedList });
+              })
+          });
         })
-          .then(response => this.setState({ watched: response.data }))
-      }
     }
   }
-
 
   saveWatchedMovies(index, event) {
 
@@ -56,22 +64,23 @@ class PopularMovies extends Component {
       movieID: selectedMovie,
       addedOrder: new Date()
     })
-      .then(function (response) {
+      .then((response) => {
         console.log(response);
+        if (response.data.errmsg) {
+          alert("already added")
+        }
       })
-      .catch(function (error) {
-        console.log(error);
-      });
   }
 
   componentDidMount() {
     this.getPopularMovies();
-    this.getWatchedData();
   }
 
   render() {
 
     const { movies } = this.state;
+    const { watched } = this.state;
+    
     const { isAuthenticated } = this.props.auth;
 
     return (
@@ -91,7 +100,13 @@ class PopularMovies extends Component {
                 </div>
                 <div className="uk-text-center">
                   {
-                    isAuthenticated() ? (<div><button onClick={this.saveWatchedMovies.bind(this, index)} className="addToWatchedBtn">Add to Watchlist</button></div>) : ''
+                    isAuthenticated() ? (
+                      <div>
+                      {
+                      (watched.some((e) => e.id === movie.id)) ? (<button className="removeFromWatchedBtn">watched</button>) : (<div><button onClick={this.saveWatchedMovies.bind(this, index)} className="addToWatchedBtn">Add to List</button></div>)                
+                      }                    
+                      </div>
+                      ) : ''
                   }
                 </div>
               </div>
