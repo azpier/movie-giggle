@@ -53,7 +53,8 @@ class PopularMovies extends Component {
 
     axios.post('http://localhost:8080/api/userwatched', {
       userID: userProfile.sub,
-      movieID: selectedMovie
+      movieID: selectedMovie,
+      addedOrder: new Date()
     })
       .then(function (response) {
         console.log(response);
