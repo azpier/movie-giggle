@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { getMovieData } from '../Utils/movie-api.js';
+import { getPopularMovies, getLatestMovies, getNowPlayingMovies, getTopRatedMovies, getUpcomingMovies } from '../Utils/movie-api.js';
 import '../App.css';
 import axios from 'axios';
+import FontAwesome from 'react-fontawesome';
 
 class PopularMovies extends Component {
 
@@ -9,15 +10,38 @@ class PopularMovies extends Component {
     super(props)
     this.state = {
       movies: [],
-      watched: []
+      watched: [],
+      page: 1
     };
-    this.getWatchedData();
     this.saveWatchedMovies = this.saveWatchedMovies.bind(this);
-
   }
 
-  getPopularMovies() {
-    getMovieData().then((movies) => {
+  getPopularMoviesList() {
+    getPopularMovies(this.state.page).then((movies) => {
+      this.setState({ movies });
+    });
+  }
+
+   getLatestMoviesList() {
+    getLatestMovies().then((movies) => {
+      this.setState({ movies });
+    });
+  }
+
+   getNowPlayingMoviesList() {
+    getNowPlayingMovies(this.state.page).then((movies) => {
+      this.setState({ movies });
+    });
+  }
+
+   getTopRatedMoviesList() {
+    getTopRatedMovies(this.state.page).then((movies) => {
+      this.setState({ movies });
+    });
+  }
+
+   getUpcomingMoviesList() {
+    getUpcomingMovies(this.state.page).then((movies) => {
       this.setState({ movies });
     });
   }
@@ -51,41 +75,35 @@ class PopularMovies extends Component {
   }
 
   saveWatchedMovies(index, event) {
-
     let userProfile = localStorage.getItem('user_profile');
     userProfile = JSON.parse(userProfile);
-
     const { movies } = this.state;
-
     const selectedMovie = movies[index].id;
 
-    axios.post('http://localhost:8080/api/userwatched', {
+      axios.post('http://localhost:8080/api/userwatched', {
       userID: userProfile.sub,
       movieID: selectedMovie,
       addedOrder: new Date()
     })
       .then((response) => {
+        this.getWatchedData();
         console.log(response);
-        if (response.data.errmsg) {
-          alert("already added")
-        }
       })
   }
 
   componentDidMount() {
-    this.getPopularMovies();
+    this.getPopularMoviesList();
+    this.getWatchedData();
   }
 
   render() {
-
     const { movies } = this.state;
     const { watched } = this.state;
-    
     const { isAuthenticated } = this.props.auth;
 
     return (
       <div>
-        <div className="uk-container uk-section">
+        <div className="uk-container uk-padding">
           <div>
             {
               isAuthenticated() ? (<h3 className="uk-text-center">Welcome</h3>) : (<h3 className="uk-text-center">Please login to add movies to your list</h3>)
@@ -97,16 +115,14 @@ class PopularMovies extends Component {
               <div key={index} className="uk-padding">
                 <div className="uk-card uk-card-default uk-card-hover uk-text-center">
                   <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main-images" className="posterImg" />
-                </div>
-                <div className="uk-text-center">
                   {
                     isAuthenticated() ? (
                       <div>
-                      {
-                      (watched.some((e) => e.id === movie.id)) ? (<button className="removeFromWatchedBtn">watched</button>) : (<div><button onClick={this.saveWatchedMovies.bind(this, index)} className="addToWatchedBtn">Add to List</button></div>)                
-                      }                    
+                        {
+                          (watched.some((e) => e.id === movie.id)) ? (<a className="watchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square " size="2x"/></a>) : (<a onClick={this.saveWatchedMovies.bind(this, index)} className="addToWatchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square " size="2x"/></a>)
+                        }
                       </div>
-                      ) : ''
+                    ) : ''
                   }
                 </div>
               </div>
