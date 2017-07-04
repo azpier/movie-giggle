@@ -1,32 +1,60 @@
-.addToWatchedBtn{
-    color: white;
-    position: absolute;
-    top: 5px;
-    left: 5px;
+.addToWatchedBtn {
+  color: white;
+  position: absolute;
+  top: 5px;
+  left: 5px;
 }
-.watchedBtn{
-    color: #4CED69;
-    position: absolute;
-    top: 5px;
-    left: 5px;
+
+.watchedBtn {
+  color: #4CED69;
+  position: absolute;
+  top: 5px;
+  left: 5px;
 }
-.watchedBtn:hover{
-    color: red;
+
+.loadingIcon {
+  color: white;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  animation-name: spin;
+  animation-duration: 4000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
-.removeFromWatchedBtn{
-    background: linear-gradient(#EE395B 0%, #e82222 100%);
-    padding: 4px 12px;
-    margin: 10px;
-    font-size: 12px;
-    color: white;
-    display: inline-block;
-    position: relative;
-    border: 1px solid rgba(0,0,0,0.21);
-    border-bottom: 4px solid rgba(0,0,0,0.21);
-    border-radius: 4px;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+
+.watchedBtn:hover {
+  color: #4CED69;
 }
-.posterImg{
-    width: 170px;
-    height: 255px;
+
+.addToWatchedBtn:hover{
+  color: white;
+}
+
+.removeFromWatchedBtn {
+  background: linear-gradient(#EE395B 0%, #e82222 100%);
+  padding: 4px 12px;
+  margin: 10px;
+  font-size: 12px;
+  color: white;
+  display: inline-block;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.21);
+  border-bottom: 4px solid rgba(0, 0, 0, 0.21);
+  border-radius: 4px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.posterImg {
+  width: 170px;
+  height: 255px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

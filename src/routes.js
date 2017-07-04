@@ -3,7 +3,6 @@ import { Redirect, Route, BrowserRouter } from 'react-router-dom';
 import App from './App';
 import LoginPage from './Components/LoginPage';
 import Movies from './Components/Movies';
-import Profile from './Components/Profile';
 import WatchedMovies from './Components/WatchedMovies';
 import Callback from './Callback/Callback';
 import Auth from './Auth/Auth';
@@ -25,13 +24,6 @@ export const makeMainRoutes = () => {
         <Route path="/" render={(props) => <App auth={auth} {...props} />} />
         <Route path="/login" render={(props) => <LoginPage auth={auth} {...props} />} />
         <Route path="/movies" render={(props) => <Movies auth={auth} {...props} />} />
-        <Route path="/profile" render={(props) => (
-          !auth.isAuthenticated() ? (
-            <Redirect to="/login" />
-          ) : (
-              <Profile auth={auth} {...props} />
-            )
-        )} />
         <Route path="/watchedlist" render={(props) => (
           !auth.isAuthenticated() ? (
             <Redirect to="/login" />

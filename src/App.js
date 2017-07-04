@@ -41,7 +41,6 @@ class App extends Component {
       <nav className="uk-navbar-container uk-navbar uk-padding-small">
         <div className="uk-navbar-right">
           <button className="uk-button uk-button-default" onClick={this.goTo.bind(this, 'movies')}>Home</button>
-          <button className="uk-button uk-button-default" onClick={this.goTo.bind(this, 'profile')}>Profile</button>
           <button className="uk-button uk-button-default" onClick={this.goTo.bind(this, 'watchedlist')}>Watched List</button>
           {
             !isAuthenticated() && (
