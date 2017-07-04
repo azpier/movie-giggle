@@ -1,96 +1,85 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
+import {observer} from "mobx-react";
+import {observable, action} from "mobx";
+import '../App.css';
+import FontAwesome from 'react-fontawesome';
 
-class WatchedMovies extends Component {
+@observer class WatchedMovies extends Component {
+  @observable profile = [];
+  @observable userWatched = [];
 
   constructor(props) {
-    super(props)
-
-    this.state = {
-      userWatched: []
-    };
-    this.getWatchedData();
-  }
-
-  //Gets user selection from DB for API query
-  getWatchedData() {
-
-    let arrayWatchedList = [];
+    super(props);
 
     let userProfile = localStorage.getItem('user_profile');
     userProfile = JSON.parse(userProfile);
 
+    this.profile = userProfile;
+  }
+
+  //Gets user selection from DB for API query
+  @action getWatchedData() {
+    let arrayWatchedList = [];
+
     return axios.get('http://localhost:8080/api/userwatched/:', {
       params: {
-        userID: userProfile.sub
+        userID: this.profile.sub
       }
+    }).then((response) => {
+      response.data.map((watchedMovies) => {
+        const searchID = watchedMovies.movieID;
+        const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
+        //call tmdb api here!!!
+        return axios.get(url).then((response) => {
+          response.data.addedOrder = watchedMovies.addedOrder;
+          arrayWatchedList.push(response.data);
+          this.userWatched = arrayWatchedList;
+        })
+      });
     })
-      .then((response) => {
+  }
+
+  @action refreshData() {
+
+    let arrayWatchedList = [];
+
+    return axios.get('http://localhost:8080/api/userwatched/:', {
+      params: {
+        userID: this.profile.sub
+      }
+    }).then((response) => {
+      if (response.data.length !== 0) {
         response.data.map((watchedMovies) => {
           const searchID = watchedMovies.movieID;
           const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
           //call tmdb api here!!!
-          return axios.get(url)
-            .then((response) => {
-              response.data.addedOrder = watchedMovies.addedOrder;
-              arrayWatchedList.push(response.data);
-              this.setState({
-                userWatched: arrayWatchedList
-              });
-
-            })
+          return axios.get(url).then((response) => {
+            response.data.addedOrder = watchedMovies.addedOrder;
+            arrayWatchedList.push(response.data);
+            this.userWatched = arrayWatchedList;
+          })
         });
-      })
+      } else {
+        //add stuff here to re render component
+        this.userWatched = "";
+      }
+    })
   }
 
-  refreshData() {
-
-    let arrayWatchedList = [];
-
-    let userProfile = localStorage.getItem('user_profile');
-    userProfile = JSON.parse(userProfile);
-
-    return axios.get('http://localhost:8080/api/userwatched/:', {
-        params: {
-          userID: userProfile.sub
-        }
-      })
-      .then((response) => {
-        if(response.data.length !== 0){
-        response.data.forEach((watchedMovies) => {
-          const searchID = watchedMovies.movieID;
-          const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
-          //call tmdb api here!!!
-          return axios.get(url)
-            .then((response) => {
-              response.data.addedOrder = watchedMovies.addedOrder;
-              arrayWatchedList.push(response.data);
-              this.setState({
-                userWatched: arrayWatchedList
-              });
-            })
-        });
-        } else {
-          //add stuff here to re render component
-          this.setState({userWatched: ""})
-        }
-      })
+  componentWillMount() {
+    this.getWatchedData();
   }
 
   render() {
 
-    const { userWatched } = this.state;
-    if (userWatched !== "") {
-      userWatched.sort(function (a, b) {
+    if (this.userWatched !== "") {
+      this.userWatched.sort(function(a, b) {
         return new Date(a.addedOrder) - new Date(b.addedOrder);
       });
     }
-    
 
-    let userProfile = localStorage.getItem('user_profile');
-    userProfile = JSON.parse(userProfile);
-
-    if (userWatched.length === 0) {
+    if (this.userWatched.length === 0) {
       return (
         <div>The list is empty</div>
       )
@@ -98,17 +87,21 @@ class WatchedMovies extends Component {
       return (
         <div>
           <div className="uk-container uk-section">
-            <h3 className="uk-text-center">Hello {userProfile.name}</h3>
-            <hr />
-            <div className="uk-grid uk-grid-match uk-child-width-1-5@m">
-              {userWatched.map((movie, index) => (
-                <div key={index} className="uk-padding">
-                  <div className="uk-card uk-card-default uk-card-hover uk-text-center">
-                  <span>{movie.addedOrder}</span>
-                    <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main-images" className="posterImg" />
-                  </div>
-                  <div className="uk-text-center">
-                   <DeleteButton watchedList={this.state.userWatched} index={index} getContent={this.refreshData.bind(this)}/>
+            <div className="uk-grid uk-child-width-1-1@m">
+              {this.userWatched.map((movie, index) => (
+                <div key={index} className="uk-padding-small">
+                  <div className="uk-card uk-card-default uk-grid uk-grid-small">
+                    <div className="uk-card-media-left uk-card uk-cover-container uk-width-1-4 uk-padding">
+                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main-images" className="posterImg"/>
+                    </div>
+                    <div className="uk-width-3-4 uk-card-body">
+                        <h3>{movie.original_title}</h3>
+                        <p>{movie.overview}</p>
+                        <p>Minutes: {movie.runtime}</p>
+                        <p>Release date: {movie.release_date}</p>
+                        <p>Rating: {movie.vote_average}</p>
+                        <DeleteButton watchedList={this.userWatched} profile={this.profile} index={index} getContent={this.refreshData.bind(this)}/>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -124,33 +117,27 @@ export default WatchedMovies;
 
 //delete button component
 class DeleteButton extends Component {
-  
-  Constructor (){
-    this.deleteWatchedMovie= this.deleteWatchedMovie.bind(this)
+
+  Constructor() {
+    this.deleteWatchedMovie = this.deleteWatchedMovie.bind(this)
   }
 
   deleteWatchedMovie(event) {
-    
     const userWatched = this.props.watchedList;
     const index = this.props.index;
-
     const selectedMovie = userWatched[index].id;
-
-    let userProfile = localStorage.getItem('user_profile');
-    userProfile = JSON.parse(userProfile);
-
-    const userID = userProfile.sub;
+    const userID = this.props.profile.sub;
 
     axios.delete('http://localhost:8080/api/userwatched', {
-        params: {
-          movieID: selectedMovie,
-          userID: userID
-        }
-      }).then(()=> this.props.getContent())
+      params: {
+        movieID: selectedMovie,
+        userID: userID
+      }
+    }).then(() => this.props.getContent())
   }
   render() {
-      return(
-         <button onClick={ this.deleteWatchedMovie.bind(this) } className="removeFromWatchedBtn">Remove</button>
-      );
+    return (
+      <a onClick={this.deleteWatchedMovie.bind(this)} className="removeWatchedListBtn"><FontAwesome name="fa-window-close" className="fa fa-window-close" size="2x"/></a>
+    );
   }
 }
