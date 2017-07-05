@@ -86,13 +86,13 @@ import FontAwesome from 'react-fontawesome';
     } else {
       return (
         <div>
-          <div className="uk-container uk-section">
-            <div className="uk-grid uk-child-width-1-1@m">
+          <div className="container section">
+            <div className="columns">
               {this.userWatched.map((movie, index) => (
-                <div key={index} className="uk-padding-small">
+                <div key={index} className="column">
                   <div className="uk-card uk-card-default uk-grid uk-grid-small">
                     <div className="uk-card-media-left uk-card uk-cover-container uk-width-1-4 uk-padding">
-                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main-images" className="posterImg"/>
+                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" className="posterImg"/>
                     </div>
                     <div className="uk-width-3-4 uk-card-body">
                         <h3>{movie.original_title}</h3>
