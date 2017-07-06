@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {observer} from "mobx-react";
-import {observable, action} from "mobx";
-import {getPopularMovies} from '../Utils/movie-api.js';
+import React, { Component } from 'react';
+import { observer } from "mobx-react";
+import { observable, action } from "mobx";
+import { getPopularMovies } from '../Utils/movie-api.js';
 import '../App.css';
 import axios from 'axios';
 import FontAwesome from 'react-fontawesome';
@@ -31,7 +31,7 @@ import FontAwesome from 'react-fontawesome';
   }
 
   @action getWatchedData() {
-    const {isAuthenticated} = this.props.auth;
+    const { isAuthenticated } = this.props.auth;
     let arrayWatchedList = [];
 
     if (isAuthenticated()) {
@@ -90,7 +90,7 @@ import FontAwesome from 'react-fontawesome';
 
   render() {
 
-    const {isAuthenticated} = this.props.auth;
+    const { isAuthenticated } = this.props.auth;
     const watchedMovies = this.watched;
 
     return (
@@ -111,7 +111,7 @@ import FontAwesome from 'react-fontawesome';
                 </div>
               </div>
             )
-}
+          }
         </div>
         <div className="section ">
           <div className="container">
@@ -120,33 +120,33 @@ import FontAwesome from 'react-fontawesome';
                 <div key={index} className="column is-2">
                   <div className="card has-text-centered">
                     <div className="card-image">
-                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main"/>
-                      <ModalMovies clicked={index} movie={movie}/>
+                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
+                      <ModalMovies clicked={index} movie={movie} />
                     </div>
                     {isAuthenticated()
                       ? (
                         <div>
                           {(this.isLoading === true)
                             ? (
-                              <span className="loadingIcon"><FontAwesome name="fa-spinner" className="fa fa-spinner" size="2x"/></span>
+                              <span className="loadingIcon"><FontAwesome name="fa-spinner" className="fa fa-spinner" size="2x" /></span>
                             )
                             : (
                               <div>
                                 {(watchedMovies.some((e) => e.id === movie.id))
                                   ? (
-                                    <a onClick={this.deleteWatchedMovie.bind(this, index)} className="watchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square" size="2x"/></a>
+                                    <a onClick={this.deleteWatchedMovie.bind(this, index)} className="watchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square" size="2x" /></a>
                                   )
                                   : (
-                                    <a onClick={this.saveWatchedMovies.bind(this, index)} className="addToWatchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square " size="2x"/></a>
+                                    <a onClick={this.saveWatchedMovies.bind(this, index)} className="addToWatchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square " size="2x" /></a>
                                   )
-}
+                                }
                               </div>
                             )
-}
+                          }
                         </div>
                       )
                       : ''
-}
+                    }
                   </div>
                 </div>
               ))}
@@ -162,39 +162,54 @@ export default Movies;
 
 @observer class ModalMovies extends Component {
   @observable status = "modal not-active";
+  @observable selectedMovie = "";
 
-  toggleClass() {
+  @action toggleClass() {
     var css = (this.status === "modal not-active")
       ? "modal is-active"
       : "modal not-active";
     this.status = css;
   }
 
+  @action getSelectedMovieInfo() {
+    const searchID = this.props.movie.id;
+    const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
+    return axios.get(url)
+      .then(response => this.selectedMovie = response.data)
+  }
+
+  onButtonClickFunctions() {
+    this.toggleClass();
+    this.getSelectedMovieInfo();
+  }
+
   render() {
-    const movie = this.props.movie;
+    const movie = this.selectedMovie;
     const classes = this.status;
 
     return (
       <div>
-        <a onClick={this.toggleClass.bind(this)}>More Info</a>
+        <a onClick={this.onButtonClickFunctions.bind(this)}><i className="fa fa-search-plus" aria-hidden="true"></i></a>
         <div className={classes}>
           <div className="modal-background"></div>
           <div className="modal-content box">
-              <div className="columns">
+            {
+              (this.selectedMovie !== "") ? (<div className="columns">
                 <div className="column is-one-third">
-                    <img className="card" src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main"/>
+                  <img className="card" src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
                 </div>
-                  <div className="column content has-text-left">
-                    <h1>{movie.title}</h1>
-                    <p>{movie.overview}</p>
-                    <p>Minutes: {movie.runtime}</p>
-                    <p>Year: ({movie.release_date.slice(0, 4)})</p>
-                    <p>Rating: <i className="fa fa-star starRatingIcon"></i>  {movie.vote_average}</p>
-                    <p>Vote count: {movie.vote_count}</p>
+                <div className="column content has-text-left">
+                  <h1>{movie.title}</h1>
+                  <p>{movie.overview}</p>
+                  <p>Minutes: {movie.runtime}</p>
+                  <p>Year: ({movie.release_date.slice(0, 4)})</p>
+                  <p>Rating: <i className="fa fa-star starRatingIcon"></i>  {movie.vote_average}</p>
+                  <p>Vote count: {movie.vote_count}</p>
                 </div>
-              </div>
+              </div>) : (<div></div>)
+            }
           </div>
-          <a onClick={this.toggleClass.bind(this)} className="modal-close is-large"></a>
+          <a onClick={this.onButtonClickFunctions.bind(this)} className="modal-close is-large"></a>
         </div>
       </div>
     );
