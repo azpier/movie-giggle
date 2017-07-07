@@ -4,6 +4,8 @@ import {observer} from "mobx-react";
 import {observable, action} from "mobx";
 import '../App.css';
 import FontAwesome from 'react-fontawesome';
+import ModalMovies from './ModalMovies';
+
 
 @observer class WatchedMovies extends Component {
   @observable profile = [];
@@ -93,6 +95,7 @@ import FontAwesome from 'react-fontawesome';
                   <div className="uk-card uk-card-default uk-grid uk-grid-small">
                     <div className="uk-card-media-left uk-card uk-cover-container uk-width-1-4 uk-padding">
                       <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" className="posterImg"/>
+                      <ModalMovies clicked={index} movie={movie}/>
                     </div>
                     <div className="uk-width-3-4 uk-card-body">
                         <h3>{movie.original_title}</h3>
