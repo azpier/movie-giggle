@@ -12,6 +12,21 @@
   left: 5px;
 }
 
+.moreDetailsBtn{
+  position: absolute;
+  top: 50%;
+  left: 45%;
+}
+
+.moreDetailsBtn i {
+  font-size: 2em;
+  color: white;
+}
+
+.moreDetailsBtn i:hover {
+  color: white;
+}
+
 .loadingIcon {
   color: white;
   position: absolute;

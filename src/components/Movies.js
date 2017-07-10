@@ -13,6 +13,8 @@ import ModalMovies from './ModalMovies';
   @observable watched = [];
   @observable isLoading = false;
   @observable page = 1;
+  @observable isMouseInside = false;
+  @observable selectedMovie = [];
 
   constructor(props) {
     super(props);
@@ -84,6 +86,17 @@ import ModalMovies from './ModalMovies';
     }).then(() => this.getWatchedData())
   }
 
+  @action mouseIn(movie) {
+    this.selectedMovie = movie.id;
+    this.isMouseInside = true;
+  }
+
+  @action mouseOut() {
+    this.selectedMovie = "";
+    this.isMouseInside = false;
+
+  }
+
   componentWillMount() {
     this.getPopularMoviesList();
     this.getWatchedData();
@@ -116,42 +129,52 @@ import ModalMovies from './ModalMovies';
         </div>
         <div className="section ">
           <div className="container">
-            <div className="columns is-multiline">
-              {this.movies.map((movie, index) => (
-                <div key={index} className="column is-2">
-                  <div className="card has-text-centered">
-                    <div className="card-image">
-                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
-                      <ModalMovies clicked={index} movie={movie} />
-                    </div>
-                    {isAuthenticated()
-                      ? (
-                        <div>
-                          {(this.isLoading === true)
-                            ? (
-                              <span className="loadingIcon"><FontAwesome name="fa-spinner" className="fa fa-spinner" size="2x" /></span>
-                            )
-                            : (
-                              <div>
-                                {(watchedMovies.some((e) => e.id === movie.id))
-                                  ? (
-                                    <a onClick={this.deleteWatchedMovie.bind(this, index)} className="watchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square" size="2x" /></a>
-                                  )
-                                  : (
-                                    <a onClick={this.saveWatchedMovies.bind(this, index)} className="addToWatchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square " size="2x" /></a>
-                                  )
-                                }
-                              </div>
-                            )
+            
+              <div className="columns is-multiline">
+                {this.movies.map((movie, index) => (
+                  <div key={index} className="column is-2">                 
+                    <div className="has-text-centered" onMouseEnter={this.mouseIn.bind(this, movie)} onMouseLeave={this.mouseOut.bind(this)}>
+                      <div className="card-image">
+                        <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
+                        <div className="moreDetailsBtn">
+                          {
+                            (this.isMouseInside) ? (<div>
+                              {
+                                (this.movies[index].id === this.selectedMovie) ? (<ModalMovies movie={movie} />) : ("")
+                              }
+                            </div>) : ("")
                           }
                         </div>
-                      )
-                      : ''
-                    }
+
+                      </div>
+                      {isAuthenticated()
+                        ? (
+                          <div>
+                            {(this.isLoading === true)
+                              ? (
+                                <span className="loadingIcon"><FontAwesome name="fa-spinner" className="fa fa-spinner" size="2x" /></span>
+                              )
+                              : (
+                                <div>
+                                  {(watchedMovies.some((e) => e.id === movie.id))
+                                    ? (
+                                      <a onClick={this.deleteWatchedMovie.bind(this, index)} className="watchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square" size="2x" /></a>
+                                    )
+                                    : (
+                                      <a onClick={this.saveWatchedMovies.bind(this, index)} className="addToWatchedBtn"><FontAwesome name="fa-check-square" className="fa fa-check-square " size="2x" /></a>
+                                    )
+                                  }
+                                </div>
+                              )
+                            }
+                          </div>
+                        )
+                        : ''
+                      }
+                    </div>                 
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
           </div>
         </div>
       </div>
