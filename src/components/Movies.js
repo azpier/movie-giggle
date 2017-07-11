@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { observer } from "mobx-react";
 import { observable, action } from "mobx";
-import { getPopularMovies } from '../Utils/movie-api.js';
+import { getPopularMovies, getNowPlayingMovies, getTopRatedMovies, getUpcomingMovies } from '../Utils/movie-api.js';
 import '../App.css';
 import axios from 'axios';
 import FontAwesome from 'react-fontawesome';
 import ModalMovies from './ModalMovies';
+import MovieFilter from './MovieFilter';
 
 @observer class Movies extends Component {
   @observable profile = [];
@@ -33,6 +34,25 @@ import ModalMovies from './ModalMovies';
     });
   }
 
+  @action getNowPlayingMoviesList() {
+    getNowPlayingMovies(this.page).then((movies) => {
+      this.movies = movies;
+    });
+  }
+
+  @action getTopRatedMoviesList() {
+    getTopRatedMovies(this.page).then((movies) => {
+      this.movies = movies;
+    });
+  }
+
+  @action getUpcomingMoviesList() {
+    getUpcomingMovies(this.page).then((movies) => {
+      this.movies = movies;
+    });
+  }
+
+
   @action getWatchedData() {
     const { isAuthenticated } = this.props.auth;
     let arrayWatchedList = [];
@@ -40,6 +60,7 @@ import ModalMovies from './ModalMovies';
     if (isAuthenticated()) {
 
       this.isLoading = true;
+      //Get user selections in db
       return axios.get('http://localhost:8080/api/userwatched/:', {
         params: {
           userID: this.profile.sub
@@ -49,7 +70,7 @@ import ModalMovies from './ModalMovies';
           response.data.map((watchedMovies) => {
             const searchID = watchedMovies.movieID;
             const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
-            //call TMDB api here!!!
+            //call TMDB api and get all user selected movies
             return axios.get(url).then((response) => {
               response.data.addedOrder = watchedMovies.addedOrder;
               arrayWatchedList.push(response.data);
@@ -109,44 +130,24 @@ import ModalMovies from './ModalMovies';
 
     return (
       <div>
-        <div className="hero">
-          {isAuthenticated()
-            ? (
-              <div className="hero-body">
-                <div className="container">
-                  <h1 className="title">Welcome {this.profile.name}</h1>
-                </div>
-              </div>
-            )
-            : (
-              <div className="hero-body">
-                <div className="container">
-                  <h1 className="title">Please log in to add movies to your lists</h1>
-                </div>
-              </div>
-            )
-          }
-        </div>
+      <MovieFilter popular={this.getPopularMoviesList.bind(this)} nowPlaying={this.getNowPlayingMoviesList.bind(this)} topRated={this.getTopRatedMoviesList.bind(this)} upcoming={this.getUpcomingMoviesList.bind(this)}/>
         <div className="section ">
           <div className="container">
-            
-              <div className="columns is-multiline">
-                {this.movies.map((movie, index) => (
-                  <div key={index} className="column is-2">                 
-                    <div className="has-text-centered" onMouseEnter={this.mouseIn.bind(this, movie)} onMouseLeave={this.mouseOut.bind(this)}>
-                      <div className="card-image">
-                        <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
-                        <div className="moreDetailsBtn">
-                          {
-                            (this.isMouseInside) ? (<div>
-                              {
-                                (this.movies[index].id === this.selectedMovie) ? (<ModalMovies movie={movie} />) : ("")
-                              }
-                            </div>) : ("")
-                          }
-                        </div>
-
-                      </div>
+            <div className="columns is-multiline">
+              {this.movies.map((movie, index) => (
+                <div key={index} className="column is-2">
+                  <div className="has-text-centered" onMouseEnter={this.mouseIn.bind(this, movie)} onMouseLeave={this.mouseOut.bind(this)}>
+                    <div className="card-image">
+                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" className="card"/>
+                      <span className="moreDetailsBtn">
+                        {
+                          (this.isMouseInside) ? (<div>
+                            {
+                              (this.movies[index].id === this.selectedMovie) ? (<ModalMovies movie={movie} />) : ("")
+                            }
+                          </div>) : ("")
+                        }
+                      </span>
                       {isAuthenticated()
                         ? (
                           <div>
@@ -171,10 +172,11 @@ import ModalMovies from './ModalMovies';
                         )
                         : ''
                       }
-                    </div>                 
+                    </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

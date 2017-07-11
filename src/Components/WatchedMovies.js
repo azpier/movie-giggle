@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
-import {observer} from "mobx-react";
-import {observable, action} from "mobx";
+import { observer } from "mobx-react";
+import { observable, action } from "mobx";
 import '../App.css';
 import FontAwesome from 'react-fontawesome';
 import ModalMovies from './ModalMovies';
-
 
 @observer class WatchedMovies extends Component {
   @observable profile = [];
@@ -76,7 +75,7 @@ import ModalMovies from './ModalMovies';
   render() {
 
     if (this.userWatched !== "") {
-      this.userWatched.sort(function(a, b) {
+      this.userWatched.sort(function (a, b) {
         return new Date(a.addedOrder) - new Date(b.addedOrder);
       });
     }
@@ -89,21 +88,26 @@ import ModalMovies from './ModalMovies';
       return (
         <div>
           <div className="container section">
-            <div className="columns">
+            <div className="columns is-multiline">
               {this.userWatched.map((movie, index) => (
-                <div key={index} className="column">
-                  <div className="uk-card uk-card-default uk-grid uk-grid-small">
-                    <div className="uk-card-media-left uk-card uk-cover-container uk-width-1-4 uk-padding">
-                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" className="posterImg"/>
-                      <ModalMovies clicked={index} movie={movie}/>
+                <div key={index} className="column is-half">
+                  <div className="columns">
+                    <div className="column is-3">
+                      <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" className="posterImg card" />
                     </div>
-                    <div className="uk-width-3-4 uk-card-body">
-                        <h3>{movie.original_title}</h3>
-                        <p>{movie.overview}</p>
-                        <p>Minutes: {movie.runtime}</p>
-                        <p>Release date: {movie.release_date}</p>
-                        <p>Rating: {movie.vote_average}</p>
-                        <DeleteButton watchedList={this.userWatched} profile={this.profile} index={index} getContent={this.refreshData.bind(this)}/>
+                    <div className="column">
+                      <h3>{movie.original_title}</h3>
+                      <p>{movie.runtime} Minutes</p>
+                      <p>Year: ({movie.release_date.slice(0, 4)})</p>
+                      <p>Rating: {movie.vote_average}</p>
+                      <div className="columns">
+                        <div className="column">
+                          <ModalMovies movie={movie} />
+                        </div>
+                        <div className="column">
+                          <DeleteButton watchedList={this.userWatched} profile={this.profile} index={index} getContent={this.refreshData.bind(this)} />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -140,7 +144,7 @@ class DeleteButton extends Component {
   }
   render() {
     return (
-      <a onClick={this.deleteWatchedMovie.bind(this)} className="removeWatchedListBtn"><FontAwesome name="fa-window-close" className="fa fa-window-close" size="2x"/></a>
+      <a onClick={this.deleteWatchedMovie.bind(this)} className="removeWatchedListBtn"><FontAwesome name="fa-window-close" className="fa fa-window-close" size="2x" /></a>
     );
   }
 }

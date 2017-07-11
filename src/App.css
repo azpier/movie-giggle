@@ -1,5 +1,5 @@
 .addToWatchedBtn {
-  color: white;
+  color: #969696;
   position: absolute;
   top: 5px;
   left: 5px;
@@ -67,4 +67,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.posterImg{
+  width: 150px;
 }
