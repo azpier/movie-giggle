@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { observable, action } from "mobx";
 import { observer } from "mobx-react";
-import '../App.css';
 import axios from 'axios';
 import FontAwesome from 'react-fontawesome';
 import ModalMovies from './ModalMovies';
-import MovieFilter from './MovieFilter';
 import heroImage from '../../public/images/clapperboard.svg';
 import MovieListStore from '../stores/movieList';
+import '../App.css';
 
 @observer
 class Movies extends Component {
@@ -157,7 +156,14 @@ class Movies extends Component {
           <div className="hero-foot hero-footer-bg">
             <nav className="tabs is-boxed is-fullwidth">
               <div className="container">
-                <MovieFilter />
+                <div className="tabs is-centered">
+                  <ul>
+                    <li><a onClick={this.movieList.getPopularMoviesList.bind(this)}>Popular Movies</a></li>
+                    <li><a onClick={this.movieList.getNowPlayingMoviesList.bind(this)}>Now Playing</a></li>
+                    <li><a onClick={this.movieList.getTopRatedMoviesList.bind(this)}>Top Rated</a></li>
+                    <li><a onClick={this.movieList.getUpcomingMoviesList.bind(this)}>Upcoming Movies</a></li>
+                  </ul>
+                </div>
               </div>
             </nav>
           </div>
