@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { observable, action } from "mobx";
 import '../App.css';
 import axios from 'axios';
+import FontAwesome from 'react-fontawesome';
 
 
 @observer class ModalMovies extends Component {
@@ -48,7 +49,7 @@ import axios from 'axios';
                   <p>{movie.overview}</p>
                   <p>Minutes: {movie.runtime}</p>
                   <p>Year: ({movie.release_date.slice(0, 4)})</p>
-                  <p>Rating: <i className="fa fa-star starRatingIcon"></i>  {movie.vote_average}</p>
+                  <p>Rating: {movie.vote_average} <FontAwesome name="fa-star" className="fa fa-star star-icon" /></p>
                   <p>Vote count: {movie.vote_count}</p>
                 </div>
               </div>) : (<div></div>)

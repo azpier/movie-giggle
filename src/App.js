@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './App.css';
-import 'bulma/css/bulma.css'
+import 'bulma/css/bulma.css';
+import DevTools from 'mobx-react-devtools';
 
 class App extends Component {
   goTo(route) {
@@ -17,8 +18,8 @@ class App extends Component {
 
   getUserProfile() {
 
-    const {isAuthenticated} = this.props.auth;
-    const {userProfile, getProfile} = this.props.auth;
+    const { isAuthenticated } = this.props.auth;
+    const { userProfile, getProfile } = this.props.auth;
 
     if (isAuthenticated()) {
       if (!userProfile) {
@@ -36,13 +37,17 @@ class App extends Component {
   }
 
   render() {
-    const {isAuthenticated} = this.props.auth;
+    const { isAuthenticated } = this.props.auth;
 
     return (
-      <nav className="nav">
-        <div className="nav-right nav-menu">
-          <a className="nav-item" onClick={this.goTo.bind(this, 'movies')}>Home</a>
-          <a className="nav-item" onClick={this.goTo.bind(this, 'watchedlist')}>Watched List</a>
+
+      <nav className="navbar">
+        <div>
+          <DevTools />
+        </div>
+        <div className="navbar-end navbar-menu">
+          <a className="navbar-item" onClick={this.goTo.bind(this, 'movies')}>Home</a>
+          <a className="navbar-item" onClick={this.goTo.bind(this, 'watchedlist')}>Watched List</a>
         </div>
         <div>
           {!isAuthenticated() && (
@@ -59,22 +64,22 @@ class App extends Component {
               </div>
             </div>
           )
-}
+          }
           {isAuthenticated() && (
             <div className="nav-item">
-          <div className="field is-grouped">
-            <p className="control">
-             <a className="button is-danger" onClick={this.logout.bind(this)}>
-                <span className="icon">
-                  <i className="fa fa-sign-out"></i>
-                </span>
-                <span>Log Out</span>
-              </a>
-            </p>
-          </div>
-        </div>
+              <div className="field is-grouped">
+                <p className="control">
+                  <a className="button is-danger" onClick={this.logout.bind(this)}>
+                    <span className="icon">
+                      <i className="fa fa-sign-out"></i>
+                    </span>
+                    <span>Log Out</span>
+                  </a>
+                </p>
+              </div>
+            </div>
           )
-}
+          }
         </div>
       </nav>
     );

@@ -38,12 +38,6 @@
   animation-timing-function: linear;
 }
 
-.starRatingIcon{
-  font-size: 0.7em !important;
-  vertical-align: middle !important;
-  color: #eaba4b;
-}
-
 .watchedBtn:hover {
   color: #4CED69;
 }
@@ -71,4 +65,21 @@
 
 .posterImg{
   width: 150px;
+}
+
+.heroimg{
+  width: 100px;
+}
+
+.hero-body-bg{
+  background-color: #3e3e3e !important;
+}
+
+.hero-footer-bg{
+  background-color: #295e7a !important;
+}
+
+.star-icon{
+ color: #f1c519;
+ vertical-align: middle !important;
 }

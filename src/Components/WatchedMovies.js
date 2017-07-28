@@ -13,17 +13,14 @@ import ModalMovies from './ModalMovies';
   constructor(props) {
     super(props);
 
-    let userProfile = localStorage.getItem('user_profile');
-    userProfile = JSON.parse(userProfile);
-
-    this.profile = userProfile;
+    this.profile = JSON.parse(localStorage.getItem('user_profile'));
   }
 
   //Gets user selection from DB for API query
   @action getWatchedData() {
     let arrayWatchedList = [];
 
-    return axios.get('http://localhost:8080/api/userwatched/:', {
+    return axios.get('https://movie-giggle-backend.herokuapp.com/api/userwatched/:', {
       params: {
         userID: this.profile.sub
       }
@@ -45,7 +42,7 @@ import ModalMovies from './ModalMovies';
 
     let arrayWatchedList = [];
 
-    return axios.get('http://localhost:8080/api/userwatched/:', {
+    return axios.get('https://movie-giggle-backend.herokuapp.com/api/userwatched/:', {
       params: {
         userID: this.profile.sub
       }
@@ -135,7 +132,7 @@ class DeleteButton extends Component {
     const selectedMovie = userWatched[index].id;
     const userID = this.props.profile.sub;
 
-    axios.delete('http://localhost:8080/api/userwatched', {
+    axios.delete('https://movie-giggle-backend.herokuapp.com/api/userwatched', {
       params: {
         movieID: selectedMovie,
         userID: userID
