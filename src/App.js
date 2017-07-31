@@ -2,8 +2,18 @@ import React, { Component } from 'react';
 import './App.css';
 import 'bulma/css/bulma.css';
 import DevTools from 'mobx-react-devtools';
+import Auth from '../src/Auth/Auth';
 
 class App extends Component {
+
+  componentWillMount() {
+    this.auth = new Auth();
+
+    if(this.auth.isAuthenticated()){
+      this.auth.getProfile();
+    }
+  }
+
   goTo(route) {
     this.props.history.replace(`/${route}`)
   }
@@ -14,26 +24,6 @@ class App extends Component {
 
   logout() {
     this.props.auth.logout();
-  }
-
-  getUserProfile() {
-
-    const { isAuthenticated } = this.props.auth;
-    const { userProfile, getProfile } = this.props.auth;
-
-    if (isAuthenticated()) {
-      if (!userProfile) {
-        getProfile((err, profile) => {
-          localStorage.setItem('user_profile', JSON.stringify(profile));
-        });
-      } else {
-        localStorage.setItem('user_profile', JSON.stringify(userProfile));
-      }
-    }
-  }
-
-  componentWillMount() {
-    this.getUserProfile();
   }
 
   render() {

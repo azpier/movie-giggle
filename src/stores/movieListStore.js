@@ -39,4 +39,5 @@ class MovieListStore {
 
 }
 
-export default MovieListStore;
+const movieListStore = new MovieListStore();
+export default movieListStore;

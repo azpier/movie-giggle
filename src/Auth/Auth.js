@@ -1,7 +1,7 @@
 import auth0 from 'auth0-js';
 import { AUTH_CONFIG } from './auth0-variables';
 import history from '../history';
-
+import userProfile from '../stores/userProfileStore';
 
 export default class Auth {
   auth0 = new auth0.WebAuth({
@@ -12,8 +12,6 @@ export default class Auth {
     responseType: 'token id_token',
     scope: 'openid profile'
   });
-
-  userProfile;
 
   constructor() {
     this.login = this.login.bind(this);
@@ -42,7 +40,7 @@ export default class Auth {
   }
 
   setSession(authResult) {
-    
+
     // Set the time that the access token will expire at
     let expiresAt = JSON.stringify(
       authResult.expiresIn * 1000 + new Date().getTime()
@@ -50,7 +48,7 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
-  
+
     // navigate to the home route
     history.replace('/');
 
@@ -64,12 +62,13 @@ export default class Auth {
     return accessToken;
   }
 
-getProfile() {
+  getProfile() {
     let accessToken = this.getAccessToken();
+
     this.auth0.client.userInfo(accessToken, (err, profile) => {
       if (profile) {
-        this.userProfile = profile;
         localStorage.setItem('user_profile', JSON.stringify(profile));
+        userProfile.profile = JSON.parse(localStorage.getItem('user_profile'));
       }
     });
   }
@@ -80,7 +79,7 @@ getProfile() {
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('user_profile');
-    this.userProfile = null;
+    userProfile.profile = "";
     // navigate to the movies route
     history.replace('/movies');
   }
