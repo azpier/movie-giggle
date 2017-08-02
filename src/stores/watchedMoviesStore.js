@@ -47,6 +47,7 @@ class WatchedMoviesStore {
             userID: userProfile.profile.sub,
             movieID: selectedMovie,
             addedOrder: new Date()
+            // eslint-disable-next-line
         }).then(() => { watchedMoviesStore.getWatchedData() })
     }
 
@@ -57,6 +58,7 @@ class WatchedMoviesStore {
                 movieID: selectedMovie,
                 userID: userProfile.profile.sub
             }
+            // eslint-disable-next-line
         }).then(() => { watchedMoviesStore.getWatchedData() })
     }
 }
