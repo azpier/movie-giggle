@@ -1,14 +1,15 @@
 import { observable, action } from "mobx";
 import { getPopularMovies, getNowPlayingMovies, getTopRatedMovies, getUpcomingMovies } from '../Utils/movie-api.js';
+import PageNumber from '../stores/pageStore';
 
 class MovieListStore {
     @observable movies = [];
-    @observable page = 1;
     @observable movieCategories = "";
 
     @action getPopularMoviesList = () => {
+        this.movieCategories = "Popular Movies";
         this.movies = [];
-        getPopularMovies(this.page).then((movie) => {
+        getPopularMovies(PageNumber.page).then((movie) => {
             this.movies = movie;
         });
     }
@@ -16,7 +17,7 @@ class MovieListStore {
     @action getNowPlayingMoviesList = () => {
         this.movieCategories = "Now Playing Movies";
         this.movies = [];
-        getNowPlayingMovies(this.page).then((movies) => {
+        getNowPlayingMovies(PageNumber.page).then((movies) => {
             this.movies = movies;
         });
     }
@@ -24,7 +25,7 @@ class MovieListStore {
     @action getTopRatedMoviesList = () => {
         this.movieCategories = "Top Rated Movies";
         this.movies = [];
-        getTopRatedMovies(this.page).then((movies) => {
+        getTopRatedMovies(PageNumber.page).then((movies) => {
             this.movies = movies;
         });
     }
@@ -32,7 +33,7 @@ class MovieListStore {
     @action getUpcomingMoviesList = () => {
         this.movieCategories = "Upcoming Movies";
         this.movies = [];
-        getUpcomingMovies(this.page).then((movies) => {
+        getUpcomingMovies(PageNumber.page).then((movies) => {
             this.movies = movies;
         });
     }

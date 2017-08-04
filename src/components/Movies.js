@@ -4,13 +4,15 @@ import ModalMovies from './ModalMovies';
 import movieListStore from '../stores/movieListStore';
 import loadingStore from '../stores/loadingStore';
 import watchedMoviesStore from '../stores/watchedMoviesStore';
+import Pagination from '../Components/Pagination';
+import PageNumber from '../stores/pageStore';
 import '../App.css';
 
 @observer
 class Movies extends Component {
 
   componentWillMount() {
-    movieListStore.getPopularMoviesList();
+    movieListStore.getPopularMoviesList(PageNumber.page);
     watchedMoviesStore.getWatchedData();
   }
 
@@ -59,6 +61,7 @@ class Movies extends Component {
 
     return (
         <div className="ui stackable two column very relaxed grid container">
+          <div className="ui horizontal divider">{movieListStore.movieCategories} Page #{PageNumber.page}</div>
           <div className="three wide column">
             <div className="ui fluid vertical menu">
               <a className="item" onClick={movieListStore.getPopularMoviesList.bind(this)}>Popular Movies</a>
@@ -70,6 +73,7 @@ class Movies extends Component {
           <div className="thirteen wide column">
             <div className="ui three column doubling stackable grid container">
               {MoviesListed}
+              <div><Pagination /></div>
             </div>
           </div>
         </div>
