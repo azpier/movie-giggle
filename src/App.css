@@ -12,23 +12,34 @@
   left: 5px;
 }
 
+.watchedremoveBtn {
+  color: red;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.watchedremoveBtn:hover {
+  color: red;
+}
+
 .moreDetailsBtn{
   position: absolute;
-  top: 50%;
-  left: 45%;
+  top: 5px;
+  left: 80%;
 }
 
 .moreDetailsBtn i {
   font-size: 2em;
-  color: white;
+  color: #c5c5c5;
 }
 
 .moreDetailsBtn i:hover {
-  color: white;
+  color: #c5c5c5;
 }
 
 .loadingIcon {
-  color: white;
+  color: #c5c5c5;
   position: absolute;
   top: 5px;
   left: 5px;
@@ -38,18 +49,12 @@
   animation-timing-function: linear;
 }
 
-.starRatingIcon{
-  font-size: 0.7em !important;
-  vertical-align: middle !important;
-  color: #eaba4b;
-}
-
 .watchedBtn:hover {
-  color: #4CED69;
+  color: #0bda30;
 }
 
 .addToWatchedBtn:hover{
-  color: white;
+  color: #c5c5c5;
 }
 
 .removeWatchedListBtn:hover{
@@ -69,6 +74,36 @@
   }
 }
 
-.posterImg{
-  width: 150px;
+.heroimg{
+  width: 100px;
+}
+
+.hero-body-bg{
+  background-color: #3e3e3e !important;
+}
+
+.hero-footer-bg{
+  background-color: #295e7a !important;
+}
+
+.star-icon{
+ color: #f1c519;
+ vertical-align: middle !important;
+}
+
+.watched-movies-info{
+  background: #3f3f3f;
+  padding: 5px;
+  color: #fff;
+}
+
+.watched-movies-info > span {
+  margin: 0 12px;
+}
+
+.watched-card{
+  line-height: 0;
+}
+.watched-card > div{
+  line-height: 1;
 }

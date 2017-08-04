@@ -5,24 +5,13 @@ class LoginPage extends Component {
     this.props.auth.login();
   }
   render() {
-    const { isAuthenticated } = this.props.auth;
     return (
-      <div className="section">
-      <div className="container has-text-centered">
-        {
-          isAuthenticated() && (
-            <h2 className="message is-success">You are logged in!</h2>
-          )
-        }
-        {
-          !isAuthenticated() && (
-            <h2 className="message is-danger">
-              You are not logged in! Please{' '}
-              <a style={{ cursor: 'pointer' }} onClick={this.login.bind(this)}>Log In</a>
-              {' '}to access this area.</h2>
-          )
-        }
-      </div>
+      <div className="ui container center aligned">
+        <div className="ui compact red message">
+            <div className="header">
+              Please log in to create movie lists.
+            </div>
+        </div>
       </div>
     );
   }

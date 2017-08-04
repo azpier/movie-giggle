@@ -1,63 +1,54 @@
 import React, { Component } from 'react';
 import { observer } from "mobx-react";
-import { observable, action } from "mobx";
-import '../App.css';
+import { observable } from "mobx";
+import { Header, Modal } from 'semantic-ui-react';
 import axios from 'axios';
+import '../App.css';
 
+@observer
+class ModalMovies extends Component {
+  @observable movieInfo = "";
 
-@observer class ModalMovies extends Component {
-  @observable status = "modal not-active";
-  @observable selectedMovie = "";
-
-  @action toggleClass() {
-    var css = (this.status === "modal not-active")
-      ? "modal is-active"
-      : "modal not-active";
-    this.status = css;
-  }
-
-  @action getSelectedMovieInfo() {
-    const searchID = this.props.movie.id;
+  getSelectedMovieInfo() {
+    const searchID = this.props.movie;
     const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
     return axios.get(url)
-      .then(response => this.selectedMovie = response.data)
+      .then(response => this.movieInfo = response.data)
   }
 
   onButtonClickFunctions() {
-    this.toggleClass();
     this.getSelectedMovieInfo();
   }
 
   render() {
-    const movie = this.selectedMovie;
-    const classes = this.status;
+    const movie = this.movieInfo;
 
     return (
-      <div>
-        <a onClick={this.onButtonClickFunctions.bind(this)}><i className="fa fa-search-plus" aria-hidden="true"></i></a>
-        <div className={classes}>
-          <div className="modal-background"></div>
-          <div className="modal-content box">
+      <Modal trigger={<a onClick={this.onButtonClickFunctions.bind(this)}><i className="large zoom icon"></i></a>}>
+        <Modal.Content>
+          <div className="ui grid">
+            <div className="four wide column">
+              <img className="ui card" src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
+            </div>
+            <div className="twelve wide column">
+            <Header>{movie.title}</Header>
             {
-              (this.selectedMovie !== "") ? (<div className="columns">
-                <div className="column is-one-third">
-                  <img className="card" src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
-                </div>
-                <div className="column content has-text-left">
-                  <h1>{movie.title}</h1>
+              (movie === "") ? ("") : (
+                <span>
                   <p>{movie.overview}</p>
                   <p>Minutes: {movie.runtime}</p>
                   <p>Year: ({movie.release_date.slice(0, 4)})</p>
-                  <p>Rating: <i className="fa fa-star starRatingIcon"></i>  {movie.vote_average}</p>
+                  <p>Rating: <i className="star icon"></i>{movie.vote_average}</p>
                   <p>Vote count: {movie.vote_count}</p>
-                </div>
-              </div>) : (<div></div>)
+                </span>
+              )
             }
-          </div>
-          <a onClick={this.onButtonClickFunctions.bind(this)} className="modal-close is-large"></a>
-        </div>
-      </div>
+            </div>
+          </div>   
+        </Modal.Content>
+      </Modal>
     );
   }
 }
+
 export default ModalMovies;
