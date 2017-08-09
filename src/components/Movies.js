@@ -6,6 +6,7 @@ import loadingStore from '../stores/loadingStore';
 import watchedMoviesStore from '../stores/watchedMoviesStore';
 import Pagination from '../Components/Pagination';
 import PageNumber from '../stores/pageStore';
+import userProfile from '../stores/userProfileStore';
 import '../App.css';
 
 @observer
@@ -24,8 +25,8 @@ class Movies extends Component {
     let movieLoading = loadingStore.isLoading;
 
     const MoviesListed = moviesLoaded.map((movie, index) => (
-      <div key={index} className="three wide column">
-        <div className="ui card">
+      <div key={index} className="eight wide mobile three wide computer column">
+        <div className="ui link card">
           <div className="image">
             <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
             <span className="moreDetailsBtn">
@@ -60,26 +61,44 @@ class Movies extends Component {
     ));
 
     return (
-        <div className="ui stackable two column very relaxed grid container">
-          <div className="ui horizontal divider">{movieListStore.movieCategories} Page #{PageNumber.page}</div>
-          <div className="three wide column">
-            <div className="ui fluid vertical menu">
-              <a className="item" onClick={movieListStore.getPopularMoviesList.bind(this)}>Popular Movies</a>
-              <a className="item" onClick={movieListStore.getNowPlayingMoviesList.bind(this)}>Now Playing</a>
-              <a className="item" onClick={movieListStore.getTopRatedMoviesList.bind(this)}>Top Rated</a>
-              <a className="item" onClick={movieListStore.getUpcomingMoviesList.bind(this)}>Upcoming Movies</a>
-            </div>
-          </div>
-          <div className="thirteen wide column">
-            <div className="ui three column doubling stackable grid container">
-              {MoviesListed}
-              <div><Pagination /></div>
+      <div>
+        <div className="category-header">
+          <div className="ui container">
+            <div className="ui stackable two column middle aligned grid">
+              <div className="column">
+                <h2>{movieListStore.movieCategories}</h2>
+              </div>
+              <div className="column right aligned">
+                {
+                  isAuthenticated() ? (<div><img src={userProfile.profile.picture} alt="profile pic" className="ui avatar image" /> <span className="padded">{userProfile.profile.name}</span></div>) : ("")
+                }
+              </div>
             </div>
           </div>
         </div>
+        <div className="ui container">
+          <div className="ui grid">
+            <div className="sixteen wide mobile three wide computer column">
+              <div className="ui fluid vertical menu">
+                <a className="item" onClick={movieListStore.getPopularMoviesList.bind(this)}>Popular Movies</a>
+                <a className="item" onClick={movieListStore.getNowPlayingMoviesList.bind(this)}>Now Playing</a>
+                <a className="item" onClick={movieListStore.getTopRatedMoviesList.bind(this)}>Top Rated</a>
+                <a className="item" onClick={movieListStore.getUpcomingMoviesList.bind(this)}>Upcoming Movies</a>
+              </div>
+            </div>
+            <div className="sixteen wide mobile thirteen wide computer center aligned column">
+              <div className="ui middle aligned segment">
+                <Pagination />
+              </div>
+              <div className="ui segment padded center aligned grid">
+                {MoviesListed}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }
 
 export default Movies;
-

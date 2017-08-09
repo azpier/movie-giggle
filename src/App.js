@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth from '../src/Auth/Auth';
+import userProfile from './stores/userProfileStore';
 
 class App extends Component {
 
   componentWillMount() {
-    this.auth = new Auth();
+    const { getProfile, isAuthenticated } = this.props.auth;
 
-    if (this.auth.isAuthenticated()) {
-      this.auth.getProfile();
+    if (isAuthenticated()) {
+      if(userProfile.profile === null){
+        getProfile();
+      }  
     }
   }
 

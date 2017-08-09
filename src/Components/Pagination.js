@@ -22,6 +22,7 @@ class Pagination extends Component {
     }
 
     getPagePlus(num) {
+        // eslint-disable-next-line
         PageNumber.page = PageNumber.page + num;
         this.goToPage();
     }
@@ -34,12 +35,14 @@ class Pagination extends Component {
     render() {
         return (
             <div className="ui pagination menu">
-                <a className="item" onClick={this.getFirstPage.bind(this, 1)}>First Page</a>
                 {
-                    (PageNumber.page > 10) ? (<a className="item" onClick={this.getPagePlus.bind(this, -10)}><i className="angle double left icon"></i></a>) : ("")
+                    (PageNumber.page !== 1) ? (<a className="item" onClick={this.getPagePlus.bind(this, -1)}><i className="angle left icon"></i></a>) : (<a className="disabled item"><i className="angle left icon"></i></a>)
                 }
                 {
-                    (PageNumber.page !== 1) ? (<a className="item" onClick={this.getPagePlus.bind(this, -1)}><i className="angle left icon"></i></a>) : ("")
+                    (PageNumber.page > 2) ? (<a className="item" onClick={this.getFirstPage.bind(this, 1)}>1</a>) : ("")
+                }
+                {
+                    (PageNumber.page >2) ? (<a className="disabled item">...</a>) : ("")
                 }
                 {
                     (PageNumber.page > 1) ? (<a className="item" onClick={this.getPagePlus.bind(this, -1)}>{PageNumber.page - 1}</a>) : ("")
@@ -51,7 +54,6 @@ class Pagination extends Component {
                     (PageNumber.page === 1) ? (<a className="item" onClick={this.getPagePlus.bind(this, 3)}>{PageNumber.page + 3}</a>) : ("")
                 }
                 <a className="item" onClick={this.getPagePlus.bind(this, 1)}><i className="angle right icon"></i></a>
-                <a className="item" onClick={this.getPagePlus.bind(this, 10)}><i className="angle double right icon"></i></a>
             </div>
         )
     }

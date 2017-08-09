@@ -107,3 +107,15 @@
 .watched-card > div{
   line-height: 1;
 }
+
+.category-header {
+  padding: 25px;
+  background: #292929;
+  margin-bottom: 18px;
+  font-size: 1.7rem;
+  color: #fff;
+}
+
+.ui.menu {
+  margin: 0 !important;
+}
