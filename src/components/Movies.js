@@ -7,7 +7,9 @@ import watchedMoviesStore from '../stores/watchedMoviesStore';
 import Pagination from '../Components/Pagination';
 import PageNumber from '../stores/pageStore';
 import userProfile from '../stores/userProfileStore';
+import SearchModule from '../Components/Search';
 import '../App.css';
+import imageNotAvailable from '../../public/images/notavailable.jpg';
 
 @observer
 class Movies extends Component {
@@ -26,36 +28,39 @@ class Movies extends Component {
 
     const MoviesListed = moviesLoaded.map((movie, index) => (
       <div key={index} className="eight wide mobile three wide computer column">
-        <div className="ui link card">
-          <div className="image">
-            <img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
-            <span className="moreDetailsBtn">
-              <ModalMovies movie={movie.id} />
-            </span>
-            {isAuthenticated()
-              ? (
-                <div>
-                  {(movieLoading === true) ? (
-                    <span className="loadingIcon"><i className="large spinner icon"></i></span>
-                  )
-                    : (
-                      <div>
-                        {(watchedMovies.some((e) => e.id === movie.id))
-                          ? (
-                            <a onClick={watchedMoviesStore.deleteWatchedMovie.bind(this, index, movie.id)} className="watchedBtn"><i className="large add square icon"></i></a>
-                          )
-                          : (
-                            <a onClick={watchedMoviesStore.saveWatchedMovies.bind(this, index, movie.id)} className="addToWatchedBtn"><i className="large add square icon"></i></a>
-                          )
-                        }
-                      </div>
-                    )
-                  }
-                </div>
+        <div className="ui image">
+          {
+            (movie.poster_path === null) ? (
+              <ModalMovies movie={movie.id} image={
+                <img src={imageNotAvailable} alt="notavailable" className="ui card" />
+              } />
+            ) : (
+                <ModalMovies movie={movie.id} image={<img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" className="ui card" />} />
               )
-              : ''
-            }
-          </div>
+          }
+          {isAuthenticated()
+            ? (
+              <div>
+                {(movieLoading === true) ? (
+                  <span className="loadingIcon"><i className="large spinner icon"></i></span>
+                )
+                  : (
+                    <div>
+                      {(watchedMovies.some((e) => e.id === movie.id))
+                        ? (
+                          <a onClick={watchedMoviesStore.deleteWatchedMovie.bind(this, index, movie.id)} className="watchedBtn"><i className="large add square icon"></i></a>
+                        )
+                        : (
+                          <a onClick={watchedMoviesStore.saveWatchedMovies.bind(this, index, movie.id)} className="addToWatchedBtn"><i className="large add square icon"></i></a>
+                        )
+                      }
+                    </div>
+                  )
+                }
+              </div>
+            )
+            : ''
+          }
         </div>
       </div>
     ));
@@ -78,7 +83,8 @@ class Movies extends Component {
         </div>
         <div className="ui container">
           <div className="ui grid">
-            <div className="sixteen wide mobile three wide computer column">
+            <div className="sixteen wide mobile three wide computer column">       
+              <div className="search-module-style"><SearchModule /></div>
               <div className="ui fluid vertical menu">
                 <a className="item" onClick={movieListStore.getPopularMoviesList.bind(this)}>Popular Movies</a>
                 <a className="item" onClick={movieListStore.getNowPlayingMoviesList.bind(this)}>Now Playing</a>

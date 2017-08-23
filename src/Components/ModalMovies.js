@@ -4,11 +4,12 @@ import { observable } from "mobx";
 import { Header, Modal } from 'semantic-ui-react';
 import axios from 'axios';
 import '../App.css';
+import imageNotAvailable from '../../public/images/notavailable.jpg';
 
 @observer
 class ModalMovies extends Component {
   @observable movieInfo = "";
-
+  
   getSelectedMovieInfo() {
     const searchID = this.props.movie;
     const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
@@ -24,11 +25,17 @@ class ModalMovies extends Component {
     const movie = this.movieInfo;
 
     return (
-      <Modal trigger={<a onClick={this.onButtonClickFunctions.bind(this)}><i className="large zoom icon"></i></a>}>
+      <Modal trigger={<a onClick={this.onButtonClickFunctions.bind(this)}>{this.props.image}</a>}>
         <Modal.Content>
           <div className="ui grid">
             <div className="four wide column">
-              <img className="ui card" src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
+            {
+              (movie.poster_path === null) ? (
+                <img className="ui card" src={imageNotAvailable} alt="notavailable" />
+              ) : (
+                <img className="ui card" src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
+              )           
+            }
             </div>
             <div className="twelve wide column">
             <Header>{movie.title}</Header>
