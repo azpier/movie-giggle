@@ -128,3 +128,7 @@
 .search-module-style {
   margin-bottom: 15px;
 }
+
+.ui.search .prompt{
+  border-radius: 4px !important;
+}

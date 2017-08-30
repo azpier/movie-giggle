@@ -25,7 +25,7 @@ class ModalMovies extends Component {
     const movie = this.movieInfo;
 
     return (
-      <Modal trigger={<a onClick={this.onButtonClickFunctions.bind(this)}>{this.props.image}</a>}>
+      <Modal trigger={<a onClick={this.onButtonClickFunctions.bind(this)}>{this.props.image}</a> } open={this.props.open} onClose={this.props.onClose} onMount={this.onButtonClickFunctions.bind(this)} closeIcon>
         <Modal.Content>
           <div className="ui grid">
             <div className="four wide column">

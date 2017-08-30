@@ -1,40 +1,78 @@
 import React, { Component } from 'react';
+import { Search, Grid } from 'semantic-ui-react';
 import axios from 'axios';
-import movieListStore from '../stores/movieListStore';
+import ModalMovies from '../Components/ModalMovies';
+import imageNotAvailable from '../../public/images/notavailable.jpg';
 
-class SearchModule extends Component {
-    constructor() {
-        super();
-        this.state = { searchValue: '' };
+export default class SearchExampleStandard extends Component {
+  constructor() {
+    super();
+    this.state = {
+      source: [],
+      modalState: false,
+      resultId: ""
     }
-    searchMovie(query) {
-        movieListStore.movies = [];
-        return axios.get(`https://api.themoviedb.org/3/search/movie?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US&query=${query}&page=1&include`)
-            .then(res => movieListStore.movies = res.data.results);
+  }
+
+  componentWillMount() {
+    this.resetComponent();
+  }
+
+  getSource = (query) => {
+    if (query !== "") {
+      return axios.get(`https://api.themoviedb.org/3/search/movie?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US&query=${query}&page=1&include`)
+        .then(res => this.setState({ source: res.data.results }));
     }
+  }
 
-    updateSearch(event) {
-        event.persist();
-        this.setState({ searchValue: event.target.value.substr(0, 20) }, () => {
-            if (this.state.searchValue.length > 0) {
-                this.searchMovie(event.target.value);
-            }
-            else {
-                movieListStore.getPopularMoviesList()
-            }
-        });
+  resetComponent = () => this.setState({ isLoading: false, results: [], value: '' })
 
-    }
+  handleResultSelect = ((e, { result }) => {
+    this.setState({ value: result.title, modalState: true, resultId: result.id });
+  });
 
-    render() {
+  handleSearchChange = (e, { value }) => {
+    this.setState({ isLoading: true, value })
+    this.getSource(value);
+    setTimeout(() => {
+      if (this.state.value.length < 1) return this.resetComponent()
 
-        return (
-            <div className="ui fluid input">
-            <input type="text" value={this.state.searchValue} onChange={this.updateSearch.bind(this)} placeholder="Filter movies by title" />
-            </div>
-            
-        )
-    }
+      const { source } = this.state;
+      const isMatch = source.map((el, i) => {
+        if (el.poster_path === null) {
+          return { title: el.title, id: el.id, key: i, image: imageNotAvailable }
+        } else {
+          return { title: el.title, id: el.id, key: i, image: "https://image.tmdb.org/t/p/w500/" + el.poster_path }
+        }
+
+      });
+
+      this.setState({
+        isLoading: false,
+        results: isMatch
+      })
+    }, 500)
+  }
+
+  handleModalClose = () => this.setState({ modalState: false });
+
+  render() {
+    const { isLoading, value, results, modalState, resultId } = this.state
+
+    return (
+      <Grid>
+        <Grid.Column width={8}>
+          <Search
+            loading={isLoading}
+            onResultSelect={this.handleResultSelect}
+            onSearchChange={this.handleSearchChange}
+            results={results}
+            value={value}
+            {...this.props}
+          />
+        </Grid.Column>
+        <ModalMovies movie={resultId} open={modalState} onClose={this.handleModalClose} />
+      </Grid>
+    )
+  }
 }
-
-export default SearchModule;
