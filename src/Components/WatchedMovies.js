@@ -48,7 +48,7 @@ class WatchedMovies extends Component {
               <div key={index} className="three wide column">
                 <div className="ui image">
                   <ModalMovies movie={movie.id} image={<img src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" className="ui card" />} />
-                    <a onClick={watchedMoviesStore.deleteWatchedMovie.bind(this, index, movie.id)} className="watchedremoveBtn"><i className="large minus square icon"></i></a>
+                  <a onClick={watchedMoviesStore.deleteWatchedMovie.bind(this, index, movie.id)} className="watchedremoveBtn"><i className="large minus square icon"></i></a>
                 </div>
               </div>
             ))}

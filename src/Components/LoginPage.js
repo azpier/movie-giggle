@@ -8,8 +8,8 @@ class LoginPage extends Component {
     return (
       <div className="ui container center aligned">
         <div className="ui compact red message">
-            <div className="header">
-              Please log in to create movie lists.
+          <div className="header">
+            Please log in to create movie lists.
             </div>
         </div>
       </div>

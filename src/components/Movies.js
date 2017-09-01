@@ -17,8 +17,18 @@ class Movies extends Component {
   componentWillMount() {
     movieListStore.getPopularMoviesList(PageNumber.page);
     watchedMoviesStore.getWatchedData();
+    this.getUserProfile();
   }
 
+  getUserProfile() {
+    const { getProfile, isAuthenticated } = this.props.auth;
+
+    if (isAuthenticated()) {
+      if (userProfile.profile === null) {
+        getProfile();
+      }
+    }
+  }
   render() {
 
     const { isAuthenticated } = this.props.auth;
@@ -75,7 +85,7 @@ class Movies extends Component {
               </div>
               <div className="column right aligned">
                 {
-                  isAuthenticated() ? (<div><img src={userProfile.profile.picture} alt="profile pic" className="ui avatar image" /> <span className="padded">{userProfile.profile.name}</span></div>) : ("")
+                  (isAuthenticated() && userProfile.profile !== null) ? (<div><img src={userProfile.profile.picture} alt="profile pic" className="ui avatar image" /> <span className="padded">{userProfile.profile.name}</span></div>) : ("")
                 }
               </div>
             </div>
@@ -83,7 +93,7 @@ class Movies extends Component {
         </div>
         <div className="ui container">
           <div className="ui grid">
-            <div className="sixteen wide mobile three wide computer column">       
+            <div className="sixteen wide mobile three wide computer column">
               <div className="search-module-style"><SearchModule /></div>
               <div className="ui fluid vertical menu">
                 <a className="item" onClick={movieListStore.getPopularMoviesList.bind(this)}>Popular Movies</a>

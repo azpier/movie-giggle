@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route, BrowserRouter } from 'react-router-dom';
-import App from './App';
+import Nav from './Nav';
 import LoginPage from './Components/LoginPage';
 import Movies from './Components/Movies';
 import WatchedMovies from './Components/WatchedMovies';
@@ -19,11 +19,11 @@ const handleAuthentication = (nextState, replace) => {
 export const makeMainRoutes = () => {
 
   return (
-    <BrowserRouter history={history} component={App}>
+    <BrowserRouter history={history}>
       <div>
-        <Route path="/" render={(props) => <App auth={auth} {...props} />} />
+        <Route render={(props) => <Nav auth={auth} {...props} />} />
+        <Route exact path="/" render={(props) => <Movies auth={auth} {...props} />} />
         <Route path="/login" render={(props) => <LoginPage auth={auth} {...props} />} />
-        <Route path="/movies" render={(props) => <Movies auth={auth} {...props} />} />
         <Route path="/watchedlist" render={(props) => (
           !auth.isAuthenticated() ? (
             <Redirect to="/login" />

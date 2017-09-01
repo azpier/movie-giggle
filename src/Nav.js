@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import userProfile from './stores/userProfileStore';
 
-class App extends Component {
-
-  componentWillMount() {
-    const { getProfile, isAuthenticated } = this.props.auth;
-
-    if (isAuthenticated()) {
-      if(userProfile.profile === null){
-        getProfile();
-      }  
-    }
-  }
+class Nav extends Component {
 
   goTo(route) {
-    this.props.history.replace(`/${route}`)
+    this.props.history.replace(`${route}`)
   }
 
   login() {
@@ -32,9 +21,9 @@ class App extends Component {
     return (
 
       <div className="ui menu">
-      <div className="right menu">
-        <a className="item" onClick={this.goTo.bind(this, 'movies')}>Home</a>
-        <a className="item" onClick={this.goTo.bind(this, 'watchedlist')}>Watched List</a>
+        <div className="right menu">
+          <a className="item" onClick={this.goTo.bind(this, '/')}>Movies</a>
+          <a className="item" onClick={this.goTo.bind(this, '/watchedlist')}>Watched List</a>
           {!isAuthenticated() && (
             <a className="item" onClick={this.login.bind(this)}><i className="user icon"></i>Log In</a>
           )
@@ -49,4 +38,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Nav;
