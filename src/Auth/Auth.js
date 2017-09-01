@@ -10,7 +10,7 @@ export default class Auth {
     redirectUri: AUTH_CONFIG.callbackUrl,
     audience: `https://${AUTH_CONFIG.domain}/userinfo`,
     responseType: 'token id_token',
-    scope: 'openid profile'
+    scope: 'openid profile email'
   });
 
   constructor() {
@@ -48,10 +48,8 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
-
     // navigate to the home route
-    history.replace('/');
-
+    // history.replace('/');
   }
 
   getAccessToken() {
@@ -69,6 +67,7 @@ export default class Auth {
       if (profile) {
         localStorage.setItem('user_profile', JSON.stringify(profile));
         userProfile.profile = JSON.parse(localStorage.getItem('user_profile'));
+        history.replace('/');
       }
     });
   }
@@ -81,7 +80,7 @@ export default class Auth {
     localStorage.removeItem('user_profile');
     userProfile.profile = "";
     // navigate to the movies route
-    history.replace('/movies');
+    history.replace('/');
   }
 
   isAuthenticated() {

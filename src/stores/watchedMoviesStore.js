@@ -15,29 +15,30 @@ class WatchedMoviesStore {
         let arrayWatchedList = [];
 
         if (this.auth.isAuthenticated()) {
-
-            loadingStore.changeLoadingStatusTrue();
-            return axios.get('https://movie-giggle-backend.herokuapp.com/api/userwatched/:', {
-                params: {
-                    userID: userProfile.profile.sub
-                }
-            }).then((response) => {
-                if (response.data.length > 0) {
-                    response.data.map((watchedMovies) => {
-                        const searchID = watchedMovies.movieID;
-                        const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
-                        return axios.get(url).then((response) => {
-                            response.data.addedOrder = watchedMovies.addedOrder;
-                            arrayWatchedList.push(response.data);
-                            this.watched = arrayWatchedList;
+            if (userProfile.profile !== null) {
+                loadingStore.changeLoadingStatusTrue();
+                return axios.get('https://movie-giggle-backend.herokuapp.com/api/userwatched/:', {
+                    params: {
+                        userID: userProfile.profile.sub
+                    }
+                }).then((response) => {
+                    if (response.data.length > 0) {
+                        response.data.map((watchedMovies) => {
+                            const searchID = watchedMovies.movieID;
+                            const url = `https://api.themoviedb.org/3/movie/${searchID}?api_key=f1bdbd7920bf91cc1db6cc18fe23f6ab&language=en-US`;
+                            return axios.get(url).then((response) => {
+                                response.data.addedOrder = watchedMovies.addedOrder;
+                                arrayWatchedList.push(response.data);
+                                this.watched = arrayWatchedList;
+                            })
                         })
-                    })
-                    loadingStore.changeLoadingStatusFalse();
-                } else {
-                    this.watched = arrayWatchedList;
-                    loadingStore.changeLoadingStatusFalse();
-                }
-            })
+                        loadingStore.changeLoadingStatusFalse();
+                    } else {
+                        this.watched = arrayWatchedList;
+                        loadingStore.changeLoadingStatusFalse();
+                    }
+                })
+            }
         }
     }
 

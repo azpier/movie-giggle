@@ -23,7 +23,7 @@
   color: red;
 }
 
-.moreDetailsBtn{
+.moreDetailsBtn {
   position: absolute;
   top: 5px;
   left: 80%;
@@ -53,15 +53,15 @@
   color: #0bda30;
 }
 
-.addToWatchedBtn:hover{
+.addToWatchedBtn:hover {
   color: #c5c5c5;
 }
 
-.removeWatchedListBtn:hover{
+.removeWatchedListBtn:hover {
   color: red;
 }
 
-.removeWatchedListBtn{
+.removeWatchedListBtn {
   color: red;
 }
 
@@ -74,36 +74,61 @@
   }
 }
 
-.heroimg{
+.heroimg {
   width: 100px;
 }
 
-.hero-body-bg{
+.hero-body-bg {
   background-color: #3e3e3e !important;
 }
 
-.hero-footer-bg{
+.hero-footer-bg {
   background-color: #295e7a !important;
 }
 
-.star-icon{
- color: #f1c519;
- vertical-align: middle !important;
+.star-icon {
+  color: #f1c519;
+  vertical-align: middle !important;
 }
 
-.watched-movies-info{
+.watched-movies-info {
   background: #3f3f3f;
   padding: 5px;
   color: #fff;
 }
 
-.watched-movies-info > span {
+.watched-movies-info>span {
   margin: 0 12px;
 }
 
-.watched-card{
+.watched-card {
   line-height: 0;
 }
-.watched-card > div{
+
+.watched-card>div {
   line-height: 1;
+}
+
+.category-header {
+  padding: 25px;
+  background: #292929;
+  margin-bottom: 18px;
+  font-size: 1.7rem;
+  color: #fff;
+}
+
+.ui.menu {
+  margin: 0 !important;
+}
+
+.movie-poster {
+  width: 100%;
+}
+
+.search-module-style {
+  margin-bottom: 15px;
+}
+
+.ui.search .prompt{
+  border-radius: 4px !important;
 }

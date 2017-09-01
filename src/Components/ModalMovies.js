@@ -4,6 +4,7 @@ import { observable } from "mobx";
 import { Header, Modal } from 'semantic-ui-react';
 import axios from 'axios';
 import '../App.css';
+import imageNotAvailable from '../../public/images/notavailable.jpg';
 
 @observer
 class ModalMovies extends Component {
@@ -24,27 +25,33 @@ class ModalMovies extends Component {
     const movie = this.movieInfo;
 
     return (
-      <Modal trigger={<a onClick={this.onButtonClickFunctions.bind(this)}><i className="large zoom icon"></i></a>}>
+      <Modal trigger={<a onClick={this.onButtonClickFunctions.bind(this)}>{this.props.image}</a>} open={this.props.open} onClose={this.props.onClose} onMount={this.onButtonClickFunctions.bind(this)} closeIcon>
         <Modal.Content>
           <div className="ui grid">
             <div className="four wide column">
-              <img className="ui card" src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
+              {
+                (movie.poster_path === null) ? (
+                  <img className="ui card" src={imageNotAvailable} alt="notavailable" />
+                ) : (
+                    <img className="ui card" src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path} alt="main" />
+                  )
+              }
             </div>
             <div className="twelve wide column">
-            <Header>{movie.title}</Header>
-            {
-              (movie === "") ? ("") : (
-                <span>
-                  <p>{movie.overview}</p>
-                  <p>Minutes: {movie.runtime}</p>
-                  <p>Year: ({movie.release_date.slice(0, 4)})</p>
-                  <p>Rating: <i className="star icon"></i>{movie.vote_average}</p>
-                  <p>Vote count: {movie.vote_count}</p>
-                </span>
-              )
-            }
+              <Header>{movie.title}</Header>
+              {
+                (movie === "") ? ("") : (
+                  <span>
+                    <p>{movie.overview}</p>
+                    <p>Minutes: {movie.runtime}</p>
+                    <p>Year: ({movie.release_date.slice(0, 4)})</p>
+                    <p>Rating: <i className="star icon"></i>{movie.vote_average}</p>
+                    <p>Vote count: {movie.vote_count}</p>
+                  </span>
+                )
+              }
             </div>
-          </div>   
+          </div>
         </Modal.Content>
       </Modal>
     );
