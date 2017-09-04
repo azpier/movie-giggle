@@ -132,3 +132,33 @@
 .ui.search .prompt{
   border-radius: 4px !important;
 }
+.ui.input {
+	width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .ui.pagination.menu {
+    font-size: 0.7rem;
+  }
+  .profile-name{
+    display: none;
+  }
+  .header-category-text{
+    font-size: 1.4rem;  
+  }
+}
+
+.ui.menu.grid>.computer.only.row {
+  padding:0;
+}
+.ui.menu.grid>.mobile.only.row {
+  padding:0;
+}
+
+.desktop-main-menu{
+  width: 100%;
+}
+
+.alert-text{
+  margin-top: 25px;
+}

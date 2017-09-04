@@ -6,11 +6,13 @@ class LoginPage extends Component {
   }
   render() {
     return (
-      <div className="ui container center aligned">
-        <div className="ui compact red message">
-          <div className="header">
-            Please log in to create movie lists.
-            </div>
+      <div className="ui container alert-text">
+        <div className="ui container center aligned">
+          <div className="ui compact red message">
+            <div className="header">
+              Please log in to create movie lists.
+          </div>
+          </div>
         </div>
       </div>
     );
