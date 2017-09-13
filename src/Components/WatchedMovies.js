@@ -10,6 +10,7 @@ import SearchModule from '../Components/Search';
 class WatchedMovies extends Component {
 
   componentWillMount() {
+    //runs db query to get the movies that are on you watched list
     watchedMoviesStore.getWatchedData();
   }
 
@@ -18,12 +19,14 @@ class WatchedMovies extends Component {
     const { isAuthenticated } = this.props.auth;
 
     if (userWatched !== "") {
+      //if there are movies on the list this sorts them by added order
       userWatched.sort(function (a, b) {
         return new Date(a.addedOrder) - new Date(b.addedOrder);
       });
     }
 
     if (userWatched.length === 0) {
+      //if the list is empty it will display this message
       return (
         <div className="ui container alert-text">
         <div className="ui grid">
@@ -42,6 +45,7 @@ class WatchedMovies extends Component {
         </div>
       )
     } else {
+      //if the list has items it will display the content
       return (
         <div>
           <div className="category-header">

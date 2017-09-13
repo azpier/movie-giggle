@@ -15,8 +15,11 @@ import imageNotAvailable from '../../public/images/notavailable.jpg';
 class Movies extends Component {
 
   componentWillMount() {
+    //this gets the popular movies when the page loads the first time
     movieListStore.getPopularMoviesList(PageNumber.page);
+    //this gets the watched movies
     watchedMoviesStore.getWatchedData();
+    //gets the logged user profile info
     this.getUserProfile();
   }
 

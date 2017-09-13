@@ -119,6 +119,7 @@
 
 .ui.menu {
   margin: 0 !important;
+  padding: 0 1em;
 }
 
 .movie-poster {
@@ -160,5 +161,19 @@
 }
 
 .alert-text{
-  margin-top: 25px;
+  padding: 5em;
+}
+
+.footer.segment {
+  padding: 5em 0em !important;
+}
+
+.site-container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.site-content{
+  flex: 1;
 }

@@ -7,6 +7,7 @@ import WatchedMovies from './Components/WatchedMovies';
 import Callback from './Callback/Callback';
 import Auth from './Auth/Auth';
 import history from './history';
+import Footer from './Footer';
 
 const auth = new Auth();
 
@@ -20,22 +21,25 @@ export const makeMainRoutes = () => {
 
   return (
     <BrowserRouter history={history}>
-      <div>
+      <div className="site-container">
         <Route render={(props) => <Nav auth={auth} {...props} />} />
-        <Route exact path="/" render={(props) => <Movies auth={auth} {...props} />} />
-        <Route path="/login" render={(props) => <LoginPage auth={auth} {...props} />} />
-        <Route path="/watchedlist" render={(props) => (
-          !auth.isAuthenticated() ? (
-            <Redirect to="/login" />
-          ) : (
-              <WatchedMovies auth={auth} {...props} />
-            )
-        )} />
-        <Route path="/callback" render={(props) => {
-          handleAuthentication(props);
-          return <Callback {...props} />
+        <div className="site-content">
+          <Route exact path="/" render={(props) => <Movies auth={auth} {...props} />} />
+          <Route path="/login" render={(props) => <LoginPage auth={auth} {...props} />} />
+          <Route path="/watchedlist" render={(props) => (
+            !auth.isAuthenticated() ? (
+              <Redirect to="/login" />
+            ) : (
+                <WatchedMovies auth={auth} {...props} />
+              )
+          )} />
+          <Route path="/callback" render={(props) => {
+            handleAuthentication(props);
+            return <Callback {...props} />
 
-        }} />
+          }} />
+        </div>
+        <Route render={(props) => <Footer auth={auth} {...props} />} />
       </div>
     </BrowserRouter>
   );

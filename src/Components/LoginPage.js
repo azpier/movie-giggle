@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 class LoginPage extends Component {
+  //this is the login page that shows when the user it not logged in and the page hes trying to access needs auth to display.
   login() {
     this.props.auth.login();
   }
