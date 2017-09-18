@@ -165,7 +165,7 @@
 }
 
 .footer.segment {
-  padding: 5em 0em !important;
+  padding: 3em 0em !important;
 }
 
 .site-container {
@@ -176,4 +176,20 @@
 
 .site-content{
   flex: 1;
+}
+
+.tmdb-logo{
+  width: 120px;
+}
+
+.ui.fluid.vertical.menu {
+  padding: 0;
+}
+
+.footer-social {
+  color: #fff !important;
+}
+
+.footer-social:hover {
+  color: #555555 !important;
 }
