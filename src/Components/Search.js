@@ -61,7 +61,7 @@ export default class SearchExampleStandard extends Component {
 
     return (
       <Grid>
-        <Grid.Column width={8}>
+        <Grid.Column width={16}>
           <Search
             loading={isLoading}
             onResultSelect={this.handleResultSelect}

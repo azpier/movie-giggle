@@ -15,8 +15,11 @@ import imageNotAvailable from '../../public/images/notavailable.jpg';
 class Movies extends Component {
 
   componentWillMount() {
+    //this gets the popular movies when the page loads the first time
     movieListStore.getPopularMoviesList(PageNumber.page);
+    //this gets the watched movies
     watchedMoviesStore.getWatchedData();
+    //gets the logged user profile info
     this.getUserProfile();
   }
 
@@ -79,13 +82,13 @@ class Movies extends Component {
       <div>
         <div className="category-header">
           <div className="ui container">
-            <div className="ui stackable two column middle aligned grid">
-              <div className="column">
-                <h2>{movieListStore.movieCategories}</h2>
+            <div className="ui middle aligned grid">
+              <div className="ui eleven wide column">
+                <h2 className="header-category-text">{movieListStore.movieCategories}</h2>
               </div>
-              <div className="column right aligned">
+              <div className="ui five wide column">
                 {
-                  (isAuthenticated() && userProfile.profile !== null) ? (<div><img src={userProfile.profile.picture} alt="profile pic" className="ui avatar image" /> <span className="padded">{userProfile.profile.name}</span></div>) : ("")
+                  (isAuthenticated() && userProfile.profile !== null) ? (<div><img src={userProfile.profile.picture} alt="profile pic" className="ui avatar image" /> <span className="profile-name">{userProfile.profile.name}</span></div>) : ("")
                 }
               </div>
             </div>
@@ -93,7 +96,7 @@ class Movies extends Component {
         </div>
         <div className="ui container">
           <div className="ui grid">
-            <div className="sixteen wide mobile three wide computer column">
+            <div className="sixteen wide center aligned mobile three wide computer column">
               <div className="search-module-style"><SearchModule /></div>
               <div className="ui fluid vertical menu">
                 <a className="item" onClick={movieListStore.getPopularMoviesList.bind(this)}>Popular Movies</a>

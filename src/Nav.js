@@ -19,19 +19,36 @@ class Nav extends Component {
     const { isAuthenticated } = this.props.auth;
 
     return (
-
-      <div className="ui menu">
-        <div className="right menu">
-          <a className="item" onClick={this.goTo.bind(this, '/')}>Movies</a>
-          <a className="item" onClick={this.goTo.bind(this, '/watchedlist')}>Watched List</a>
-          {!isAuthenticated() && (
-            <a className="item" onClick={this.login.bind(this)}><i className="user icon"></i>Log In</a>
-          )
-          }
-          {isAuthenticated() && (
-            <a className="item" onClick={this.logout.bind(this)}><i className="user outline"></i>Log Out</a>
-          )
-          }
+      <div className="ui grid">
+        <div className="mobile only row">
+          <div className="ui three item menu">
+            <a className="item" onClick={this.goTo.bind(this, '/')}>Movies</a>
+            <a className="item" onClick={this.goTo.bind(this, '/watchedlist')}>Watched List</a>
+            {!isAuthenticated() && (
+              <a className="item" onClick={this.login.bind(this)}><i className="user icon"></i>Log In</a>
+            )
+            }
+            {isAuthenticated() && (
+              <a className="item" onClick={this.logout.bind(this)}><i className="user outline"></i>Log Out</a>
+            )
+            }
+          </div>
+        </div>
+        <div className="computer only row">
+          <div className="ui menu desktop-main-menu">
+            <div className="right menu">
+              <a className="item" onClick={this.goTo.bind(this, '/')}>Movies</a>
+              <a className="item" onClick={this.goTo.bind(this, '/watchedlist')}>Watched List</a>
+              {!isAuthenticated() && (
+                <a className="item" onClick={this.login.bind(this)}><i className="user icon"></i>Log In</a>
+              )
+              }
+              {isAuthenticated() && (
+                <a className="item" onClick={this.logout.bind(this)}><i className="user outline"></i>Log Out</a>
+              )
+              }
+            </div>
+          </div>
         </div>
       </div>
     );

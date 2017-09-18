@@ -119,6 +119,7 @@
 
 .ui.menu {
   margin: 0 !important;
+  padding: 0 1em;
 }
 
 .movie-poster {
@@ -131,4 +132,64 @@
 
 .ui.search .prompt{
   border-radius: 4px !important;
+}
+.ui.input {
+	width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .ui.pagination.menu {
+    font-size: 0.7rem;
+  }
+  .profile-name{
+    display: none;
+  }
+  .header-category-text{
+    font-size: 1.4rem;  
+  }
+}
+
+.ui.menu.grid>.computer.only.row {
+  padding:0;
+}
+.ui.menu.grid>.mobile.only.row {
+  padding:0;
+}
+
+.desktop-main-menu{
+  width: 100%;
+}
+
+.alert-text{
+  padding: 5em;
+}
+
+.footer.segment {
+  padding: 3em 0em !important;
+}
+
+.site-container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.site-content{
+  flex: 1;
+}
+
+.tmdb-logo{
+  width: 120px;
+}
+
+.ui.fluid.vertical.menu {
+  padding: 0;
+}
+
+.footer-social {
+  color: #fff !important;
+}
+
+.footer-social:hover {
+  color: #555555 !important;
 }
