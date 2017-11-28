@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import { getPopularMovies, getNowPlayingMovies, getTopRatedMovies, getUpcomingMovies } from '../Utils/movie-api.js';
+import { getPopularMovies, getNowPlayingMovies, getTopRatedMovies, getUpcomingMovies } from '../utils/movie-api.js';
 import PageNumber from '../stores/pageStore';
 
 class MovieListStore {

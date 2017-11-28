@@ -36,7 +36,7 @@ class Nav extends Component {
         </div>
         <div className="computer only row">
           <div className="ui menu desktop-main-menu">
-            <div className="right menu">
+            <div className="right menu right-nav-menu">
               <a className="item" onClick={this.goTo.bind(this, '/')}>Movies</a>
               <a className="item" onClick={this.goTo.bind(this, '/watchedlist')}>Watched List</a>
               {!isAuthenticated() && (
